@@ -1090,42 +1090,7 @@
             }, 1000);
         });
     </script>
-    <script>
-        (function () {
-                const originalWindowOpen = window.open;
-                window.open = function (url, ...args) {
-                    const blockedDomains = ['geometrydashsubzero.io', 'geometrydashlite.io'];
-                    const targetDomain = (() => {
-                        try {
-                            return new URL(url).hostname;
-                        } catch (e) {
-                            return null;
-                        }
-                    })();
-                    if (targetDomain && blockedDomains.includes(targetDomain)) {
-                        return originalWindowOpen.call(window, 'https://sites.google.com/view/geometry-dash-games/explore', ...args);
-                    }
-                    return originalWindowOpen.call(window, url, ...args);
-                };
-                const originalOpenURL = window.Application?.OpenURL;
-                if (originalOpenURL) {
-                    window.Application.OpenURL = function (url) {
-                        const blockedDomains = ['geometrydashsubzero.io', 'geometrydashlite.io'];
-                        const targetDomain = (() => {
-                            try {
-                                return new URL(url).hostname;
-                            } catch (e) {
-                                return null;
-                            }
-                        })();
-                        if (targetDomain && blockedDomains.includes(targetDomain)) {
-                            return originalOpenURL.call(window.Application, 'https://sites.google.com/view/geometry-dash-games/explore');
-                        }
-                        originalOpenURL.call(window.Application, url);
-                    };
-                }
-            })();
-    </script>
+<script src="//marty-games.github.io/sitelock.js"></script>
 </body>
 
 </html>
