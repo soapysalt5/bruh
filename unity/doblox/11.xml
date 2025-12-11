@@ -1,16 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<ModulePrefs title="Google.com" />
+<Content type="html"><![CDATA[
+
+
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <title>FameGame</title>
-    <link rel="stylesheet" href="./style.css"/>
-    <script type="text/javascript" src="./Web Audio Plugin/howler.min.js"></script>
-    <script type="text/javascript" src="./Web Audio Plugin/WebAudio.js"></script>
-    <!-- Yandex Games SDK -->
-    <script src="/sdk.js"></script>
-    <!-- GameMonetize SDK Entegrasyonu -->
+    <title>google.com</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/style.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/Web Audio Plugin/howler.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/Web Audio Plugin/WebAudio.js"></script>
     <script type="text/javascript">
         window.SDK_OPTIONS = {
             gameId: "jp112o3o4hzgrnc7zaewjkrfk282pul8",
@@ -58,13 +61,13 @@
         }
     </style>
 </head>
-<body class="dark">
+<body class="dark">b
     <div id="unity-container" class="unity-desktop">
         <canvas id="unity-canvas" tabindex="-1"></canvas>
     </div>
     <div id="loading-cover" style="display:none;">
         <div id="unity-loading-bar">
-            <div id="unity-logo"><img src="logo.png"/></div>
+            <div id="unity-logo"><img src="https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/logo.png"/></div>
             <div id="unity-progress-bar-empty" style="display: none;">
                 <div id="unity-progress-bar-full"></div>
             </div>
@@ -73,7 +76,7 @@
     </div>
     <script>
         const hideFullScreenButton = "";
-        const buildUrl = "Build";
+        const buildUrl = "https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/Build";
 
         const dataParts = [
             "FameGame.data.gz.part000.gz",
@@ -115,9 +118,9 @@
 
         const config = {
             dataUrl: "",
-            frameworkUrl: buildUrl + "/FameGame.framework.js.gz",
+            frameworkUrl: buildUrl + "/FameGame.framework.js",
             codeUrl: "",
-            streamingAssetsUrl: "StreamingAssets",
+            streamingAssetsUrl: "https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/StreamingAssets",
             companyName: "DefaultCompany",
             productName: "HZ",
             productVersion: "0.1"
@@ -148,7 +151,7 @@
             container.className = "unity-mobile";
         }
 
-        loadingCover.style.background = "url('https://cdn.jsdelivr.net/gh/organization-schoogls/y@main/background.gif') center / cover";
+        loadingCover.style.background = "url('https://cdn.jsdelivr.net/gh/classrooms-1/ohanganamaranes@main/background.png') center / cover";
         loadingCover.style.display = "";
 
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -298,3 +301,8 @@
     </script>
 </body>
 </html>
+
+
+
+]]></Content>
+</Module>
