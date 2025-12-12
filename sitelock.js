@@ -6,7 +6,7 @@
     'dashmetry.io': 'dashmetry.github.io',
     'geometrydashlite.online': 'dashmetry.github.io',
     'geometrydashsubzero.io': 'dashmetry.github.io',
-    'geometrydashmeltdown.io': "dashmetry.github.io',
+    'geometrydashmeltdown.io': 'dashmetry.github.io',
     'geometrydashbloodbath.io': 'dashmetry.github.io',
     'geometrydashs.io': 'dashmetry.github.io',
     'poki.com': 'dashmetry.github.io',
