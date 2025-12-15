@@ -38,7 +38,7 @@
         const dosbox = new Dosbox({
             id: "dosbox",
             onload: function(dosbox) {
-                dosbox.run("dos/zip/TombRaiderS.zip", "./START.BAT");
+                dosbox.run("TombRaiderS.zip", "./START.BAT");
             },
             onrun: function(dosbox, app) {
                 console.log("Running:", app);
