@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
+<base href="https://marty-games.github.io/unity/geometry-dash-breeze/"
 <head>
     <title>Geometry Dash Breeze</title>
     <meta name="description"
@@ -173,12 +174,12 @@
     </style>
     <div id="gameContainer"></div>
 
-    <div id="loader"><img class="logo" src="https://martinmmcyt.github.io/images/breeze.png">
+    <div id="loader"><img class="logo" src="/images/logo.png">
         <div class="spinner"></div>
         <div class=" pos_progress">
             <div class="progress">
-                <div class="posfull"><img class="full" src="https://martinmmcyt.github.io/images/process_bar_back.png"></div>
-                <div class="posbox"><img class="box_process" src="https://martinmmcyt.github.io/images/process_bar_front.png"></div>
+                <div class="posfull"><img class="full" src="/images/process_bar_back.png"></div>
+                <div class="posbox"><img class="box_process" src="/images/process_bar_front.png"></div>
             </div>
         </div>
     </div>
@@ -1048,7 +1049,7 @@
  }</script>
     <script>
         UnityLoader.compatibilityCheck = function (e, t, r) { t(); };
-        var gameInstance = UnityLoader.instantiate("gameContainer", "Build/GeometryDashBreeze.json", {
+        var gameInstance = UnityLoader.instantiate("gameContainer", "https://marty-games.github.io/unity/geometry-dash-breeze/Build/GeometryDashBreeze.json", {
             onProgress: UnityProgress
         });
 
