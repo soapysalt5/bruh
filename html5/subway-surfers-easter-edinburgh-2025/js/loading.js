@@ -1,3 +1,4 @@
+
 /* eslint-disable prefer-template */
 /* eslint-disable func-names */
 /* eslint-disable no-var */
@@ -108,3 +109,4 @@ function LoadingBar()
 }
 
 window.loadingBar = new LoadingBar();
+
