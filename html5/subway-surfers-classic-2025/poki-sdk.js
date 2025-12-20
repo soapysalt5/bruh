@@ -1,127 +1,172 @@
-! function(e) {
-    var n = {};
+(function (modules) {
 
-    function t(o) {
-        if (n[o]) return n[o].exports;
-        var r = n[o] = {
-            i: o,
-            l: !1,
+    // -------------------------------
+    // Simple module system (Webpack)
+    // -------------------------------
+
+    const moduleCache = {};
+
+    function requireModule(id) {
+        if (moduleCache[id]) {
+            return moduleCache[id].exports;
+        }
+
+        const module = {
+            id,
+            loaded: false,
             exports: {}
         };
-        return e[o].call(r.exports, r, r.exports, t), r.l = !0, r.exports
+
+        moduleCache[id] = module;
+        modules[id].call(module.exports, module, module.exports, requireModule);
+        module.loaded = true;
+
+        return module.exports;
     }
-    t.m = e, t.c = n, t.d = function(e, n, o) {
-        t.o(e, n) || Object.defineProperty(e, n, {
-            enumerable: !0,
-            get: o
-        })
-    }, t.r = function(e) {
-        "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, {
-            value: "Module"
-        }), Object.defineProperty(e, "__esModule", {
-            value: !0
-        })
-    }, t.t = function(e, n) {
-        if (1 & n && (e = t(e)), 8 & n) return e;
-        if (4 & n && "object" == typeof e && e && e.__esModule) return e;
-        var o = Object.create(null);
-        if (t.r(o), Object.defineProperty(o, "default", {
-                enumerable: !0,
-                value: e
-            }), 2 & n && "string" != typeof e)
-            for (var r in e) t.d(o, r, function(n) {
-                return e[n]
-            }.bind(null, r));
-        return o
-    }, t.n = function(e) {
-        var n = e && e.__esModule ? function() {
-            return e.default
-        } : function() {
-            return e
+
+    requireModule.m = modules;
+    requireModule.c = moduleCache;
+
+    requireModule.defineExport = function (exports, name, getter) {
+        if (!Object.prototype.hasOwnProperty.call(exports, name)) {
+            Object.defineProperty(exports, name, {
+                enumerable: true,
+                get: getter
+            });
+        }
+    };
+
+    requireModule.markESModule = function (exports) {
+        if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
+            Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+        }
+        Object.defineProperty(exports, "__esModule", { value: true });
+    };
+
+    // Start entry module
+    requireModule(68);
+
+})({
+
+    // ===============================
+    // Module 68 – PokiSDK Loader
+    // ===============================
+    68: function (module, exports, require) {
+
+        // -------------------------------
+        // PokiSDK Queue Wrapper
+        // -------------------------------
+        function PokiQueue() {
+            this.queue = [];
+
+            this.init = (options = {}) =>
+                new Promise((resolve, reject) => {
+                    this.enqueue("init", options, resolve, reject);
+                });
+
+            this.rewardedBreak = () =>
+                Promise.resolve(false);
+
+            this.noArguments = (fnName) => () => {
+                this.enqueue(fnName);
+            };
+
+            this.oneArgument = (fnName) => (arg) => {
+                this.enqueue(fnName, arg);
+            };
+
+            this.autoResolve = () => Promise.resolve();
+            this.autoResolveObj = () => Promise.resolve();
+
+            this.notLoaded = () => {
+                console.debug("PokiSDK is not loaded yet.");
+            };
+        }
+
+        PokiQueue.prototype.enqueue = function (fn, options, resolve, reject) {
+            this.queue.push({
+                fn,
+                options,
+                resolve,
+                reject
+            });
         };
-        return t.d(n, "a", n), n
-    }, t.o = function(e, n) {
-        return Object.prototype.hasOwnProperty.call(e, n)
-    }, t.p = "", t(t.s = 68)
-}({
-    68: function(e, n, t) {
-        var o = new(function() {
-            function e() {
-                var e = this;
-                this.queue = [], this.init = function(n) {
-                    return void 0 === n && (n = {}), new Promise((function(t, o) {
-                        e.enqueue("init", n, t, o)
-                    }))
-                }, this.rewardedBreak = function() {
-                    return new Promise((function(e) {
-                        e(!1)
-                    }))
-                }, this.noArguments = function(n) {
-                    return function() {
-                        e.enqueue(n)
-                    }
-                }, this.oneArgument = function(n) {
-                    return function(t) {
-                        e.enqueue(n, t)
-                    }
-                }, this.handleAutoResolvePromise = function() {
-                    return new Promise((function(e) {
-                        e()
-                    }))
-                }, this.handleAutoResolvePromiseObj = function() {
-                    return new Promise((function(e) {
-                        e()
-                    }))
-                }, this.throwNotLoaded = function() {
-                    console.debug("PokiSDK is not loaded yet. Not all methods are available.")
+
+        PokiQueue.prototype.dequeue = function () {
+            while (this.queue.length > 0) {
+                const item = this.queue.shift();
+                const sdkFn = window.PokiSDK[item.fn];
+
+                if (typeof sdkFn !== "function") {
+                    console.error("Cannot execute " + item.fn);
+                    continue;
+                }
+
+                if (item.resolve || item.reject) {
+                    sdkFn(item.options)
+                        .then((...args) => item.resolve?.(...args))
+                        .catch((...args) => item.reject?.(...args));
+                } else {
+                    sdkFn(item.options);
                 }
             }
-            return e.prototype.enqueue = function(e, n, t, o) {
-                var r = {
-                    fn: e,
-                    options: n,
-                    resolveFn: t,
-                    rejectFn: o
-                };
-                this.queue.push(r)
-            }, e.prototype.dequeue = function() {
-                for (var e = function() {
-                        var e = n.queue.shift(),
-                            t = e,
-                            o = t.fn,
-                            r = t.options;
-                        "function" == typeof window.PokiSDK[o] ? (null == e ? void 0 : e.resolveFn) || (null == e ? void 0 : e.rejectFn) ? window.PokiSDK[o](r).then((function() {
-                            for (var n = [], t = 0; t < arguments.length; t++) n[t] = arguments[t];
-                            "function" == typeof e.resolveFn && e.resolveFn.apply(e, n)
-                        })).catch((function() {
-                            for (var n = [], t = 0; t < arguments.length; t++) n[t] = arguments[t];
-                            "function" == typeof e.rejectFn && e.rejectFn.apply(e, n)
-                        })) : void 0 !== (null == e ? void 0 : e.fn) && window.PokiSDK[o](r) : console.error("Cannot execute " + e.fn)
-                    }, n = this; this.queue.length > 0;) e()
-            }, e
-        }());
+        };
+
+        const queue = new PokiQueue();
+
+        // -------------------------------
+        // Temporary PokiSDK Stub
+        // -------------------------------
         window.PokiSDK = {
-            init: o.init,
-            initWithVideoHB: o.init,
-            customEvent: o.throwNotLoaded,
-            commercialBreak: o.handleAutoResolvePromise,
-            rewardedBreak: o.rewardedBreak,
-            displayAd: o.throwNotLoaded,
-            destroyAd: o.throwNotLoaded,
-            getLeaderboard: o.handleAutoResolvePromiseObj
-        }, ["disableProgrammatic", "gameLoadingStart", "gameLoadingFinished", "gameInteractive", "roundStart", "roundEnd", "muteAd"].forEach((function(e) {
-            window.PokiSDK[e] = o.noArguments(e)
-        })), ["setDebug", "gameplayStart", "gameplayStop", "gameLoadingProgress", "happyTime", "setPlayerAge", "togglePlayerAdvertisingConsent", "toggleNonPersonalized", "setConsentString", "logError", "sendHighscore", "setDebugTouchOverlayController"].forEach((function(e) {
-            window.PokiSDK[e] = o.oneArgument(e)
-        }));
-        var r = function() {
-                var e, n = window.pokiSDKVersion;
-                n || (n = (e = RegExp("[?&]" + "ab" + "=([^&]*)").exec(window.location.search)) && decodeURIComponent(e[1].replace(/\+/g, " ")) || "v2");
-                return "./poki-sdk-core.js"
-            }(),
-            i = document.createElement("script");
-        i.setAttribute("src", r), i.setAttribute("type", "text/javascript"), i.onload = function() {
-            return o.dequeue()
-        }, document.head.appendChild(i)
+            init: queue.init,
+            initWithVideoHB: queue.init,
+            customEvent: queue.notLoaded,
+            commercialBreak: queue.autoResolve,
+            rewardedBreak: queue.rewardedBreak,
+            displayAd: queue.notLoaded,
+            destroyAd: queue.notLoaded,
+            getLeaderboard: queue.autoResolveObj
+        };
+
+        // No-argument SDK calls
+        [
+            "disableProgrammatic",
+            "gameLoadingStart",
+            "gameLoadingFinished",
+            "gameInteractive",
+            "roundStart",
+            "roundEnd",
+            "muteAd"
+        ].forEach(name => {
+            window.PokiSDK[name] = queue.noArguments(name);
+        });
+
+        // One-argument SDK calls
+        [
+            "setDebug",
+            "gameplayStart",
+            "gameplayStop",
+            "gameLoadingProgress",
+            "happyTime",
+            "setPlayerAge",
+            "togglePlayerAdvertisingConsent",
+            "toggleNonPersonalized",
+            "setConsentString",
+            "logError",
+            "sendHighscore",
+            "setDebugTouchOverlayController"
+        ].forEach(name => {
+            window.PokiSDK[name] = queue.oneArgument(name);
+        });
+
+        // -------------------------------
+        // Load real Poki SDK
+        // -------------------------------
+        const script = document.createElement("script");
+        script.src = "./poki-sdk-core.js";
+        script.type = "text/javascript";
+        script.onload = () => queue.dequeue();
+
+        document.head.appendChild(script);
     }
 });
