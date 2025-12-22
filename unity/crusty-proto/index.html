@@ -1,3 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Unity Web Player | CrustyProto</title>
+<link rel="shortcut icon" href="TemplateData/favicon.ico">
+<link rel="stylesheet" href="TemplateData/style.css">
+</head>
+<body>
+<div id="unity-container" class="unity-desktop">
+<canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+<div id="unity-loading-bar">
+<div id="unity-logo"></div>
+<div id="unity-progress-bar-empty">
+<div id="unity-progress-bar-full"></div>
+</div>
+</div>
+<div id="unity-warning"> </div>
+<div id="unity-footer">
+<div id="unity-logo-title-footer"></div>
+<div id="unity-fullscreen-button"></div>
+<div id="unity-build-title">CrustyProto</div>
+</div>
+</div>
+<script>
+var canvas = document.querySelector("#unity-canvas");
 
-<!-- saved from url=(0055)https://html-classic.itch.zone/html/11982258/index.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="color-scheme" content="light dark"></head><body><div class="line-gutter-backdrop"></div><form autocomplete="off"><label class="line-wrap-control">Line wrap<input type="checkbox" aria-label="Line wrap"></label></form><table><tbody><tr><td class="line-number" value="1"></td><td class="line-content"><span class="html-doctype">&lt;!DOCTYPE html&gt;</span></td></tr><tr><td class="line-number" value="2"></td><td class="line-content"><span class="html-tag">&lt;html <span class="html-attribute-name">lang</span>="<span class="html-attribute-value">en-us</span>"&gt;</span></td></tr><tr><td class="line-number" value="3"></td><td class="line-content">  <span class="html-tag">&lt;head&gt;</span></td></tr><tr><td class="line-number" value="4"></td><td class="line-content">    <span class="html-tag">&lt;meta <span class="html-attribute-name">charset</span>="<span class="html-attribute-value">utf-8</span>"&gt;</span></td></tr><tr><td class="line-number" value="5"></td><td class="line-content">    <span class="html-tag">&lt;meta <span class="html-attribute-name">http-equiv</span>="<span class="html-attribute-value">Content-Type</span>" <span class="html-attribute-name">content</span>="<span class="html-attribute-value">text/html; charset=utf-8</span>"&gt;</span></td></tr><tr><td class="line-number" value="6"></td><td class="line-content">    <span class="html-tag">&lt;title&gt;</span>Unity Web Player | CrustyProto<span class="html-tag">&lt;/title&gt;</span></td></tr><tr><td class="line-number" value="7"></td><td class="line-content">    <span class="html-tag">&lt;link <span class="html-attribute-name">rel</span>="<span class="html-attribute-value">shortcut icon</span>" <span class="html-attribute-name">href</span>="<a class="html-attribute-value html-resource-link" target="_blank" href="https://html-classic.itch.zone/html/11982258/TemplateData/favicon.ico" rel="noreferrer noopener">TemplateData/favicon.ico</a>"&gt;</span></td></tr><tr><td class="line-number" value="8"></td><td class="line-content">    <span class="html-tag">&lt;link <span class="html-attribute-name">rel</span>="<span class="html-attribute-value">stylesheet</span>" <span class="html-attribute-name">href</span>="<a class="html-attribute-value html-resource-link" target="_blank" href="https://html-classic.itch.zone/html/11982258/TemplateData/style.css" rel="noreferrer noopener">TemplateData/style.css</a>"&gt;</span></td></tr><tr><td class="line-number" value="9"></td><td class="line-content">  <span class="html-tag">&lt;/head&gt;</span></td></tr><tr><td class="line-number" value="10"></td><td class="line-content">  <span class="html-tag">&lt;body&gt;</span></td></tr><tr><td class="line-number" value="11"></td><td class="line-content">    <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-container</span>" <span class="html-attribute-name">class</span>="<span class="html-attribute-value">unity-desktop</span>"&gt;</span></td></tr><tr><td class="line-number" value="12"></td><td class="line-content">      <span class="html-tag">&lt;canvas <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-canvas</span>" <span class="html-attribute-name">width</span>=<span class="html-attribute-value">960</span> <span class="html-attribute-name">height</span>=<span class="html-attribute-value">600</span> <span class="html-attribute-name">tabindex</span>="<span class="html-attribute-value">-1</span>"&gt;</span><span class="html-tag">&lt;/canvas&gt;</span></td></tr><tr><td class="line-number" value="13"></td><td class="line-content">      <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-loading-bar</span>"&gt;</span></td></tr><tr><td class="line-number" value="14"></td><td class="line-content">        <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-logo</span>"&gt;</span><span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="15"></td><td class="line-content">        <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-progress-bar-empty</span>"&gt;</span></td></tr><tr><td class="line-number" value="16"></td><td class="line-content">          <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-progress-bar-full</span>"&gt;</span><span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="17"></td><td class="line-content">        <span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="18"></td><td class="line-content">      <span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="19"></td><td class="line-content">      <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-warning</span>"&gt;</span> <span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="20"></td><td class="line-content">      <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-footer</span>"&gt;</span></td></tr><tr><td class="line-number" value="21"></td><td class="line-content">        <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-logo-title-footer</span>"&gt;</span><span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="22"></td><td class="line-content">        <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-fullscreen-button</span>"&gt;</span><span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="23"></td><td class="line-content">        <span class="html-tag">&lt;div <span class="html-attribute-name">id</span>="<span class="html-attribute-value">unity-build-title</span>"&gt;</span>CrustyProto<span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="24"></td><td class="line-content">      <span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="25"></td><td class="line-content">    <span class="html-tag">&lt;/div&gt;</span></td></tr><tr><td class="line-number" value="26"></td><td class="line-content">    <span class="html-tag">&lt;script&gt;</span></td></tr><tr><td class="line-number" value="27"></td><td class="line-content">      var canvas = document.querySelector("#unity-canvas");</td></tr><tr><td class="line-number" value="28"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="29"></td><td class="line-content">      // Shows a temporary message banner/ribbon for a few seconds, or</td></tr><tr><td class="line-number" value="30"></td><td class="line-content">      // a permanent error message on top of the canvas if type=='error'.</td></tr><tr><td class="line-number" value="31"></td><td class="line-content">      // If type=='warning', a yellow highlight color is used.</td></tr><tr><td class="line-number" value="32"></td><td class="line-content">      // Modify or remove this function to customize the visually presented</td></tr><tr><td class="line-number" value="33"></td><td class="line-content">      // way that non-critical warnings and error messages are presented to the</td></tr><tr><td class="line-number" value="34"></td><td class="line-content">      // user.</td></tr><tr><td class="line-number" value="35"></td><td class="line-content">      function unityShowBanner(msg, type) {</td></tr><tr><td class="line-number" value="36"></td><td class="line-content">        var warningBanner = document.querySelector("#unity-warning");</td></tr><tr><td class="line-number" value="37"></td><td class="line-content">        function updateBannerVisibility() {</td></tr><tr><td class="line-number" value="38"></td><td class="line-content">          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';</td></tr><tr><td class="line-number" value="39"></td><td class="line-content">        }</td></tr><tr><td class="line-number" value="40"></td><td class="line-content">        var div = document.createElement('div');</td></tr><tr><td class="line-number" value="41"></td><td class="line-content">        div.innerHTML = msg;</td></tr><tr><td class="line-number" value="42"></td><td class="line-content">        warningBanner.appendChild(div);</td></tr><tr><td class="line-number" value="43"></td><td class="line-content">        if (type == 'error') div.style = 'background: red; padding: 10px;';</td></tr><tr><td class="line-number" value="44"></td><td class="line-content">        else {</td></tr><tr><td class="line-number" value="45"></td><td class="line-content">          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';</td></tr><tr><td class="line-number" value="46"></td><td class="line-content">          setTimeout(function() {</td></tr><tr><td class="line-number" value="47"></td><td class="line-content">            warningBanner.removeChild(div);</td></tr><tr><td class="line-number" value="48"></td><td class="line-content">            updateBannerVisibility();</td></tr><tr><td class="line-number" value="49"></td><td class="line-content">          }, 5000);</td></tr><tr><td class="line-number" value="50"></td><td class="line-content">        }</td></tr><tr><td class="line-number" value="51"></td><td class="line-content">        updateBannerVisibility();</td></tr><tr><td class="line-number" value="52"></td><td class="line-content">      }</td></tr><tr><td class="line-number" value="53"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="54"></td><td class="line-content">      var buildUrl = "Build";</td></tr><tr><td class="line-number" value="55"></td><td class="line-content">      var loaderUrl = buildUrl + "/Build.loader.js";</td></tr><tr><td class="line-number" value="56"></td><td class="line-content">      var config = {</td></tr><tr><td class="line-number" value="57"></td><td class="line-content">        arguments: [],</td></tr><tr><td class="line-number" value="58"></td><td class="line-content">        dataUrl: buildUrl + "/Build.data.br",</td></tr><tr><td class="line-number" value="59"></td><td class="line-content">        frameworkUrl: buildUrl + "/Build.framework.js.br",</td></tr><tr><td class="line-number" value="60"></td><td class="line-content">        codeUrl: buildUrl + "/Build.wasm.br",</td></tr><tr><td class="line-number" value="61"></td><td class="line-content">        streamingAssetsUrl: "StreamingAssets",</td></tr><tr><td class="line-number" value="62"></td><td class="line-content">        companyName: "DefaultCompany",</td></tr><tr><td class="line-number" value="63"></td><td class="line-content">        productName: "CrustyProto",</td></tr><tr><td class="line-number" value="64"></td><td class="line-content">        productVersion: "0.1.0",</td></tr><tr><td class="line-number" value="65"></td><td class="line-content">        showBanner: unityShowBanner,</td></tr><tr><td class="line-number" value="66"></td><td class="line-content">      };</td></tr><tr><td class="line-number" value="67"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="68"></td><td class="line-content">      // By default, Unity keeps WebGL canvas render target size matched with</td></tr><tr><td class="line-number" value="69"></td><td class="line-content">      // the DOM size of the canvas element (scaled by window.devicePixelRatio)</td></tr><tr><td class="line-number" value="70"></td><td class="line-content">      // Set this to false if you want to decouple this synchronization from</td></tr><tr><td class="line-number" value="71"></td><td class="line-content">      // happening inside the engine, and you would instead like to size up</td></tr><tr><td class="line-number" value="72"></td><td class="line-content">      // the canvas DOM size and WebGL render target sizes yourself.</td></tr><tr><td class="line-number" value="73"></td><td class="line-content">      // config.matchWebGLToCanvasSize = false;</td></tr><tr><td class="line-number" value="74"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="75"></td><td class="line-content">      // If you would like all file writes inside Unity Application.persistentDataPath</td></tr><tr><td class="line-number" value="76"></td><td class="line-content">      // directory to automatically persist so that the contents are remembered when</td></tr><tr><td class="line-number" value="77"></td><td class="line-content">      // the user revisits the site the next time, uncomment the following line:</td></tr><tr><td class="line-number" value="78"></td><td class="line-content">      // config.autoSyncPersistentDataPath = true;</td></tr><tr><td class="line-number" value="79"></td><td class="line-content">      // This autosyncing is currently not the default behavior to avoid regressing</td></tr><tr><td class="line-number" value="80"></td><td class="line-content">      // existing user projects that might rely on the earlier manual</td></tr><tr><td class="line-number" value="81"></td><td class="line-content">      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be</td></tr><tr><td class="line-number" value="82"></td><td class="line-content">      // expected to change.</td></tr><tr><td class="line-number" value="83"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="84"></td><td class="line-content">      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {</td></tr><tr><td class="line-number" value="85"></td><td class="line-content">        // Mobile device style: fill the whole browser client area with the game canvas:</td></tr><tr><td class="line-number" value="86"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="87"></td><td class="line-content">        var meta = document.createElement('meta');</td></tr><tr><td class="line-number" value="88"></td><td class="line-content">        meta.name = 'viewport';</td></tr><tr><td class="line-number" value="89"></td><td class="line-content">        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';</td></tr><tr><td class="line-number" value="90"></td><td class="line-content">        document.getElementsByTagName('head')[0].appendChild(meta);</td></tr><tr><td class="line-number" value="91"></td><td class="line-content">        document.querySelector("#unity-container").className = "unity-mobile";</td></tr><tr><td class="line-number" value="92"></td><td class="line-content">        canvas.className = "unity-mobile";</td></tr><tr><td class="line-number" value="93"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="94"></td><td class="line-content">        // To lower canvas resolution on mobile devices to gain some</td></tr><tr><td class="line-number" value="95"></td><td class="line-content">        // performance, uncomment the following line:</td></tr><tr><td class="line-number" value="96"></td><td class="line-content">        // config.devicePixelRatio = 1;</td></tr><tr><td class="line-number" value="97"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="98"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="99"></td><td class="line-content">      } else {</td></tr><tr><td class="line-number" value="100"></td><td class="line-content">        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:</td></tr><tr><td class="line-number" value="101"></td><td class="line-content">        canvas.style.width = "960px";</td></tr><tr><td class="line-number" value="102"></td><td class="line-content">        canvas.style.height = "600px";</td></tr><tr><td class="line-number" value="103"></td><td class="line-content">      }</td></tr><tr><td class="line-number" value="104"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="105"></td><td class="line-content">      document.querySelector("#unity-loading-bar").style.display = "block";</td></tr><tr><td class="line-number" value="106"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="107"></td><td class="line-content">      var script = document.createElement("script");</td></tr><tr><td class="line-number" value="108"></td><td class="line-content">      script.src = loaderUrl;</td></tr><tr><td class="line-number" value="109"></td><td class="line-content">      script.onload = () =&gt; {</td></tr><tr><td class="line-number" value="110"></td><td class="line-content">        createUnityInstance(canvas, config, (progress) =&gt; {</td></tr><tr><td class="line-number" value="111"></td><td class="line-content">          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";</td></tr><tr><td class="line-number" value="112"></td><td class="line-content">              }).then((unityInstance) =&gt; {</td></tr><tr><td class="line-number" value="113"></td><td class="line-content">                document.querySelector("#unity-loading-bar").style.display = "none";</td></tr><tr><td class="line-number" value="114"></td><td class="line-content">                document.querySelector("#unity-fullscreen-button").onclick = () =&gt; {</td></tr><tr><td class="line-number" value="115"></td><td class="line-content">                  unityInstance.SetFullscreen(1);</td></tr><tr><td class="line-number" value="116"></td><td class="line-content">                };</td></tr><tr><td class="line-number" value="117"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="118"></td><td class="line-content">              }).catch((message) =&gt; {</td></tr><tr><td class="line-number" value="119"></td><td class="line-content">                alert(message);</td></tr><tr><td class="line-number" value="120"></td><td class="line-content">              });</td></tr><tr><td class="line-number" value="121"></td><td class="line-content">            };</td></tr><tr><td class="line-number" value="122"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="123"></td><td class="line-content">      document.body.appendChild(script);</td></tr><tr><td class="line-number" value="124"></td><td class="line-content"><br></td></tr><tr><td class="line-number" value="125"></td><td class="line-content">    <span class="html-tag">&lt;/script&gt;</span></td></tr><tr><td class="line-number" value="126"></td><td class="line-content">  <span class="html-tag">&lt;/body&gt;</span></td></tr><tr><td class="line-number" value="127"></td><td class="line-content"><span class="html-tag">&lt;/html&gt;</span></td></tr><tr><td class="line-number" value="128"></td><td class="line-content"><span class="html-end-of-file"></span></td></tr></tbody></table></body></html>
+// Shows a temporary message banner/ribbon for a few seconds, or
+// a permanent error message on top of the canvas if type=='error'.
+// If type=='warning', a yellow highlight color is used.
+// Modify or remove this function to customize the visually presented
+// way that non-critical warnings and error messages are presented to the
+// user.
+function unityShowBanner(msg, type) {
+var warningBanner = document.querySelector("#unity-warning");
+function updateBannerVisibility() {
+warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+}
+var div = document.createElement('div');
+div.innerHTML = msg;
+warningBanner.appendChild(div);
+if (type == 'error') div.style = 'background: red; padding: 10px;';
+else {
+if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+setTimeout(function() {
+warningBanner.removeChild(div);
+updateBannerVisibility();
+}, 5000);
+}
+updateBannerVisibility();
+}
+
+var buildUrl = "Build";
+var loaderUrl = buildUrl + "/Build.loader.js";
+var config = {
+arguments: [],
+dataUrl: buildUrl + "/Build.data.br",
+frameworkUrl: buildUrl + "/Build.framework.js.br",
+codeUrl: buildUrl + "/Build.wasm.br",
+streamingAssetsUrl: "StreamingAssets",
+companyName: "DefaultCompany",
+productName: "CrustyProto",
+productVersion: "0.1.0",
+showBanner: unityShowBanner,
+};
+
+// By default, Unity keeps WebGL canvas render target size matched with
+// the DOM size of the canvas element (scaled by window.devicePixelRatio)
+// Set this to false if you want to decouple this synchronization from
+// happening inside the engine, and you would instead like to size up
+// the canvas DOM size and WebGL render target sizes yourself.
+// config.matchWebGLToCanvasSize = false;
+
+// If you would like all file writes inside Unity Application.persistentDataPath
+// directory to automatically persist so that the contents are remembered when
+// the user revisits the site the next time, uncomment the following line:
+// config.autoSyncPersistentDataPath = true;
+// This autosyncing is currently not the default behavior to avoid regressing
+// existing user projects that might rely on the earlier manual
+// JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+// expected to change.
+
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+// Mobile device style: fill the whole browser client area with the game canvas:
+
+var meta = document.createElement('meta');
+meta.name = 'viewport';
+meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+document.getElementsByTagName('head')[0].appendChild(meta);
+document.querySelector("#unity-container").className = "unity-mobile";
+canvas.className = "unity-mobile";
+
+// To lower canvas resolution on mobile devices to gain some
+// performance, uncomment the following line:
+// config.devicePixelRatio = 1;
+
+
+} else {
+// Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+canvas.style.width = "960px";
+canvas.style.height = "600px";
+}
+
+document.querySelector("#unity-loading-bar").style.display = "block";
+
+var script = document.createElement("script");
+script.src = loaderUrl;
+script.onload = () => {
+createUnityInstance(canvas, config, (progress) => {
+document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+}).then((unityInstance) => {
+document.querySelector("#unity-loading-bar").style.display = "none";
+document.querySelector("#unity-fullscreen-button").onclick = () => {
+unityInstance.SetFullscreen(1);
+};
+
+}).catch((message) => {
+alert(message);
+});
+};
+
+document.body.appendChild(script);
+
+</script>
+</body>
+</html>
