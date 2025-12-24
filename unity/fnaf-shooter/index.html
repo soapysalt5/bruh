@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>FNaF Shooter</title>
+
+  <!-- Clean fullscreen canvas -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    canvas, iframe {
+      display: block;
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+  function loadScript(url, callback) {
+    const s = document.createElement("script");
+    s.src = url;
+    s.async = true;
+    s.onload = callback;
+    document.head.appendChild(s);
+  }
+
+  const options = {
+    loader: "unity2020",
+    loaderOptions: {
+      showProgress: false,
+      unityLoaderUrl:
+        "https://files.crazygames.com/fnaf-shooter/3/Build/FNaF_Shooter_Crazy.loader.js",
+      unityConfigOptions: {
+        codeUrl:
+          "https://files.crazygames.com/fnaf-shooter/3/Build/FNaF_Shooter_Crazy.wasm.br",
+        dataUrl:
+          "https://files.crazygames.com/fnaf-shooter/3/Build/FNaF_Shooter_Crazy.data.br",
+        frameworkUrl:
+          "https://files.crazygames.com/fnaf-shooter/3/Build/FNaF_Shooter_Crazy.framework.js.br"
+      }
+    },
+    gameName: "FNaF Shooter",
+    gameSlug: "fnaf-shooter",
+    sandbox: true
+  };
+
+  const GAMEFRAME =
+    "https://builds.crazygames.com/gameframe/v1/bundle.js";
+
+  loadScript(GAMEFRAME, () => {
+    Crazygames.load(options);
+  });
+</script>
+
+</body>
+</html>
