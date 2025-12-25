@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://marty-games.github.io/sitemap.xml
