@@ -2,11 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://admin-marty-games
-.replit.app/login">
-    <title>Redirecting…</title>
+    <title>placeholder</title></title>
   </head>
   <body>
-    <p>Redirecting to admin login…</p>
+  <script>
+const allowedUsers = ["Drag00nKnight", "placeholderRandomString67"];
+
+const user = sessionStorage.getItem("user");
+
+if (!allowedUsers.includes(user)) {
+  window.location.replace("/403.html");
+}
+</script>
+
   </body>
 </html>
