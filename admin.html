@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marty-Games Admin Portal</title>
+</head>
+<body>
+  Placeholder
+  <!-- Admin stuff coming soon. -Drag00n -->
+<script>
+const allowedUsers = ["Drag00nKnight999", "MartinMMCyt","marty-games","hackz00","BloxyLikezBloxycola"];
+
+const user = sessionStorage.getItem("user");
+
+if (!allowedUsers.includes(user)) {
+  window.location.replace("/403.html");
+}
+// I'll add more code for admin security soon. -Drag00n
+</script>
+</body>
+</html>
