@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>403 Forbidden</title>
+
     <style>
         /* Fullscreen animated canvas background */
         #bg-canvas {
@@ -31,17 +33,22 @@
             align-items: center;
             gap: 20px;
             z-index: 2;
+            text-align: center;
         }
 
         h2 {
             margin: 0;
-            text-align: center;
             font-size: 3em;
             text-shadow:
                 0 0 5px #0ff,
                 0 0 10px #0ff,
                 0 0 20px #0ff,
                 0 0 30px #0ff;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1.1em;
         }
 
         .button-container {
@@ -56,31 +63,17 @@
             font-size: 18px;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
+            background: #FFAB19;
+            box-shadow: 0 0 10px #FFAB19, 0 0 20px #FFAB19;
             transition: transform 0.2s ease, background 0.25s ease;
             text-shadow:
                 0 0 4px #fff,
                 0 0 8px #fff;
         }
 
-        .return-main-page { 
-            background: #FFAB19; 
-            box-shadow: 0 0 10px #FFAB19, 0 0 20px #FFAB19;
-        }
-        .return-main-page:hover { 
+        button:hover {
             background: #e69917;
             transform: scale(1.1);
-        }
-
-        #viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: none;
-            z-index: 5;
         }
     </style>
 </head>
@@ -88,30 +81,22 @@
 
 <canvas id="bg-canvas"></canvas>
 
-<div class="top-bar" id="menu">
+<div class="top-bar">
     <h2>403</h2>
-  <p>You cannot access this page</p>
+    <p>You do not have access to view this page.</p>
+
     <div class="button-container">
-        <button class="return-main-page"
-            onclick="loadProject('https://marty-games.github.io/')">
+        <button onclick="window.location.href='https://marty-games.github.io/'">
             Return to main page
         </button>
     </div>
 </div>
-  
+
 <script>
-    const viewer = document.getElementById("viewer");
-    const menu = document.getElementById("menu");
-
-    function loadProject(url) {
-        viewer.src = url;
-        viewer.style.display = "block";
-        menu.style.display = "none";
-    }
-
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
-    let particlesArray;
+
+    let particlesArray = [];
 
     const MAX_PARTICLES = 50;
     const MAX_DISTANCE = 100;
@@ -121,6 +106,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         particlesArray = [];
+
         for (let i = 0; i < MAX_PARTICLES; i++) {
             particlesArray.push(new Particle());
         }
@@ -135,6 +121,7 @@
             this.speedY = (Math.random() - 0.5) * 1.2;
             this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         }
+
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
@@ -144,6 +131,7 @@
             if (this.y > canvas.height) this.y = 0;
             if (this.y < 0) this.y = canvas.height;
         }
+
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -156,16 +144,15 @@
 
     function connect() {
         for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a+1; b < particlesArray.length; b++) {
-                let dx = particlesArray[a].x - particlesArray[b].x;
-                let dy = particlesArray[a].y - particlesArray[b].y;
-                let distance = Math.sqrt(dx*dx + dy*dy);
+            for (let b = a + 1; b < particlesArray.length; b++) {
+                const dx = particlesArray[a].x - particlesArray[b].x;
+                const dy = particlesArray[a].y - particlesArray[b].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
                 if (distance < MAX_DISTANCE) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(${hexToRgb(particlesArray[a].color)},${0.5 - distance / (2*MAX_DISTANCE)})`; // increased alpha
-                    ctx.shadowColor = ctx.strokeStyle;
-                    ctx.shadowBlur = 4;
-                    ctx.lineWidth = 1.2; // slightly thicker
+                    ctx.strokeStyle = `rgba(${hexToRgb(particlesArray[a].color)},${0.5 - distance / (2 * MAX_DISTANCE)})`;
+                    ctx.lineWidth = 1.2;
                     ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
                     ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
                     ctx.stroke();
@@ -175,9 +162,11 @@
     }
 
     function hexToRgb(hex) {
-        let c = hex.replace('#','');
-        if(c.length === 3) c = c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
-        const bigint = parseInt(c,16);
+        let c = hex.replace('#', '');
+        if (c.length === 3) {
+            c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+        }
+        const bigint = parseInt(c, 16);
         const r = (bigint >> 16) & 255;
         const g = (bigint >> 8) & 255;
         const b = bigint & 255;
@@ -186,10 +175,12 @@
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         particlesArray.forEach(p => {
             p.update();
             p.draw();
         });
+
         connect();
         requestAnimationFrame(animate);
     }
