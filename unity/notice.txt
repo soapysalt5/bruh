@@ -1,3 +1,0 @@
-All unity games have been moved to a seperate github repository.
-
-https://github.com/marty-games/unity/
