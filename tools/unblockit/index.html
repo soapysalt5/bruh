@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
+    <link rel="icon" href="https://pluspng.com/img-png/google-logo-png-open-2000.png" type="image/png">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 150px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            text-shadow: 0px 0px 20px white;
+        }
+
+        button {
+            background-color: #001f3f;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 0px 15px blue;
+            transition: box-shadow 0.3s;
+        }
+
+        button:hover {
+            box-shadow: 0px 0px 30px blue;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px white;
+        }
+
+        .popup button {
+            margin: 10px;
+        }
+
+        iframe {
+            display: none;
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+
+        #urlInput {
+            display: none;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0px 0px 10px gray;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 300px;
+        }
+
+        input[type="text"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 20px gray;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0px 0px 30px gray;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Let's Setup Your Browser</h1>
+    <button id="getStarted">Get Started</button>
+
+    <div class="popup" id="popup">
+        <p>Did the website load?</p>
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+
+    <div id="urlInput">
+        <input type="text" id="domain" placeholder="Enter a domain (e.g., example.com)">
+        <button id="goBtn">Go</button>
+    </div>
+
+    <iframe id="testFrame"></iframe>
+    <div id="browserling"></div>
+
+    <script src="https://www.browserling.com/js/liveapi_v1.js"></script>
+    <script>
+        const methods = [
+            { name: 'Cloudflare', method: tryCloudflare },
+            { name: 'Base64 Encoding', method: tryBase64 },
+            { name: 'Browserling', method: tryBrowserling }
+        ];
+
+        let currentMethodIndex = 0;
+        const iframe = document.getElementById('testFrame');
+        const popup = document.getElementById('popup');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const urlInput = document.getElementById('urlInput');
+        const titleElement = document.getElementById('title');
+        const domainInput = document.getElementById('domain');
+        const goBtn = document.getElementById('goBtn');
+        const getStartedBtn = document.getElementById('getStarted');
+
+        document.getElementById('getStarted').addEventListener('click', startSetup);
+        goBtn.addEventListener('click', loadCustomDomain);
+
+        function startSetup() {
+            currentMethodIndex = 0;
+            titleElement.textContent = "Let's Setup Your Browser";
+            urlInput.style.display = 'none';
+            testMethod();
+        }
+
+        function testMethod() {
+            if (currentMethodIndex >= methods.length) {
+                alert("All methods have been tested.");
+                return;
+            }
+            const method = methods[currentMethodIndex];
+            console.log(`Trying method: ${method.name}`);
+            method.method();
+        }
+
+        function showPopup() {
+            popup.style.display = 'block';
+        }
+
+        yesBtn.addEventListener('click', function() {
+            const successfulMethod = methods[currentMethodIndex].name;
+            localStorage.setItem('workingMethod', successfulMethod);
+            alert(`Success! Method "${successfulMethod}" worked and is saved.`);
+            setupURLInput();
+            getStartedBtn.style.display = 'none';
+            popup.style.display = 'none';
+        });
+
+        noBtn.addEventListener('click', function() {
+            popup.style.display = 'none';
+            currentMethodIndex++;
+            testMethod();
+        });
+
+        function setupURLInput() {
+            titleElement.textContent = "What Site Do You Want To Visit?";
+            urlInput.style.display = 'block';
+        }
+
+        function loadCustomDomain() {
+            const workingMethod = localStorage.getItem('workingMethod');
+            const domain = domainInput.value.trim();
+            if (!domain) {
+                alert("Please enter a domain.");
+                return;
+            }
+            switch (workingMethod) {
+                case 'Cloudflare':
+                    tryCloudflare(domain);
+                    break;
+                case 'Base64 Encoding':
+                    tryBase64(domain);
+                    break;
+                case 'Browserling':
+                    tryBrowserling(domain);
+                    break;
+                default:
+                    alert("No valid method stored.");
+                    break;
+            }
+        }
+
+        function tryCloudflare(domain = 'example.com') {
+            iframe.src = `https://${domain}`;
+            iframe.onload = showPopup;
+            iframe.onerror = function() {
+                console.log('Error loading iframe for Cloudflare');
+                showPopup();
+            };
+            iframe.style.display = 'block';
+        }
+
+        function tryBase64(domain) {
+            const base64Data = btoa(`<html><body><h1>Hello from Base64</h1><p>This is a base64 encoded page for ${domain}.</p></body></html>`);
+            iframe.src = `data:text/html;base64,${base64Data}`;
+            iframe.onload = showPopup;
+            iframe.onerror = function() {
+                console.log('Error loading iframe for Base64');
+                showPopup();
+            };
+            iframe.style.display = 'block';
+        }
+
+        function tryBrowserling(domain) {
+            var browserling = new BrowserlingIframe({
+                session: "Pt1MXZ9cSJt+Nk5JOpmVG/GwPxktcScKw...",
+                platform: "win/10",
+                browser: "chrome/127",
+                url: `https://${domain}`
+            });
+
+            const div = document.querySelector('#browserling');
+            div.innerHTML = "";
+            div.appendChild(browserling.iframe());
+            browserling.onLoad = function() {
+                showPopup();
+            };
+            browserling.onError = function() {
+                console.log('Error loading Browserling');
+                showPopup();
+            };
+        }
+
+        window.onload = function() {
+            const storedMethod = localStorage.getItem('workingMethod');
+            if (storedMethod) {
+                alert(`Using stored method: ${storedMethod}`);
+                setupURLInput();
+                getStartedBtn.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
