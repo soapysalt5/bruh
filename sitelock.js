@@ -8,27 +8,30 @@
     const BLOCKED_DOMAINS = {
         "geometrylite.io": "dashmetry.github.io",
         "geometrylitegame.io": "dashmetry.github.io",
+        "geometrydash.io": "dashmetry.github.io",
         "geometrydashlite.io": "dashmetry.github.io",
         "geometrydashlite.online": "dashmetry.github.io",
         "geometrydashsubzero.io": "dashmetry.github.io",
         "geometrydashmeltdown.io": "dashmetry.github.io",
         "geometrydashbloodbath.io": "dashmetry.github.io",
         "geometrydashs.io": "dashmetry.github.io",
+        "geometrygames.io": "dashmetry.github.io",
         "dashmetry.io": "dashmetry.github.io",
 
         "1games.io": "dashmetry.github.io",
+        "azgames.io": "dashmetry.github.io",
         "poki.com": "dashmetry.github.io",
         "hacker-114.github.io": "dashmetry.github.io",
         "evergreenps.github.io": "dashmetry.github.io",
         "orson-sanders.github.io": "dashmetry.github.io",
 
-        "2playergames.gitlab.io": "dc.gg/martin",
-        "ubg6.gitlab.io": "dc.gg/martin",
-        "ubg98.github.io": "dc.gg/martin",
-        "dressupgames.gitlab.io": "dc.gg/martin",
-        "dc.gg": "dc.gg/martin",
-        "discord.com": "dc.gg/martin",
-        "discord.gg": "dc.gg/martin"
+        "2playergames.gitlab.io": "//dc.gg/martin/",
+        "ubg6.gitlab.io": "//dc.gg/martin/",
+        "ubg98.github.io": "//dc.gg/martin/",
+        "dressupgames.gitlab.io": "//dc.gg/martin/",
+        "dc.gg": "//dc.gg/martin/",
+        "discord.com": "//dc.gg/martin/",
+        "discord.gg": "//dc.gg/martin/"
     };
 
     /* =========================
