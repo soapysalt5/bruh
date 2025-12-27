@@ -1,0 +1,562 @@
+<!--- Made by Aspect_SGK -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="https://crushers.web.app">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <title>Crushers</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('assets/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Orbitron', monospace, sans-serif;
+            color: #00ffea;
+            height: 100%;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        #gameCanvas {
+            display: block;
+            margin: 0 auto;
+            background: url('assets/background.jpg') no-repeat center center fixed;
+            border-radius: 16px;
+            border: 2px solid #00ffea;
+            box-shadow: 0 0 8px #00ffea, 0 0 16px #00ffea
+        }
+
+        #scoreBoard {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            background: rgba(0, 255, 234, .2);
+            padding: 6px 20px;
+            border-radius: 20px;
+            border: 1.5px solid #00ffea;
+            text-shadow: 0 0 4px #00ffea, 0 0 8px #00ffea;
+            min-width: 260px;
+            text-align: center;
+            user-select: none;
+            z-index: 10;
+            display: none
+        }
+
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/background.jpg') no-repeat center center fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #00ffea;
+            padding: 20px;
+            box-sizing: border-box
+        }
+
+        .screen h1 {
+            font-size: 48px;
+            margin-bottom: 8px;
+            letter-spacing: .15em;
+            text-shadow: 0 0 10px #00fff0, 0 0 18px #00fff0;
+            text-align: center
+        }
+
+        .screen p {
+            font-size: 18px;
+            margin-bottom: 28px;
+            font-weight: 600;
+            max-width: 300px;
+            text-align: center;
+            line-height: 1.3
+        }
+
+        .btn {
+            width: 160px;
+            padding: 14px 0;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            margin: 8px 0;
+            border-radius: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            box-shadow: 0 0 8px #00ffea, 0 0 16px #00ffea;
+            transition: background-color .25s ease, color .25s ease;
+            user-select: none;
+            outline-offset: 4px
+        }
+
+        .btn-start,
+        .btn-restart {
+            background: #00ffea;
+            color: #000
+        }
+
+        .btn-start:active,
+        .btn-restart:active {
+            background: #00c9bb
+        }
+
+        .btn-home {
+            background: #00ffea;
+            color: #000
+        }
+
+        .btn-home:active {
+            background: #00c9bb
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scoreBoard">Score: 0 | High Score: 0 | Mode: Straight</div>
+    <div id="homeScreen" class="screen">
+        <h1>CRUSHERS</h1>
+        <p>Dodge asteroids and get powerups to set your high score!</p>
+        <button class="btn btn-start" onclick="startGame()">START</button>
+    </div>
+    <div id="gameOverScreen" class="screen" style="display:none;">
+        <h1>GAME OVER</h1>
+        <p id="finalScore"></p>
+        <p id="highScoreDisplay"></p>
+        <button class="btn btn-restart" onclick="restartGame()">RESTART</button>
+        <button class="btn btn-home" onclick="goHome()">HOME</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas"),
+            ctx = canvas.getContext("2d");
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+        let mouseX = canvas.width / 2;
+        canvas.addEventListener("mousemove", e => {
+            const r = canvas.getBoundingClientRect();
+            mouseX = Math.min(Math.max(e.clientX - r.left, 0), canvas.width)
+        });
+        canvas.addEventListener("touchmove", e => {
+            e.preventDefault();
+            if (e.touches.length > 0) {
+                const r = canvas.getBoundingClientRect();
+                mouseX = Math.min(Math.max(e.touches[0].clientX - r.left, 0), canvas.width)
+            }
+        }, {
+            passive: false
+        });
+        let gunModes = ["straight", "spray", "aimbot"];
+        let currentGunMode = 0;
+        canvas.addEventListener("click", () => {
+            currentGunMode = (currentGunMode + 1) % gunModes.length;
+            updateScoreDisplay();
+        });
+        const playerSprite = new Image();
+        playerSprite.src = "assets/player.png";
+        const redBlockSprite = new Image();
+        redBlockSprite.src = "assets/asteroid.png";
+        const greenOrbSprite = new Image();
+        greenOrbSprite.src = "assets/upgrade.png";
+        const weaponPreviewImg = new Image();
+        weaponPreviewImg.src = "assets/weaponUpgrade.png";
+        const weaponImg = new Image();
+        weaponImg.src = "assets/bullet.png";
+        const shieldItemImg = new Image();
+        shieldItemImg.src = "assets/shieldUpgrade.png";
+        const shieldImg = new Image();
+        shieldImg.src = "assets/shield.png";
+        const explosionImg = new Image();
+        explosionImg.src = "assets/explosion.gif";
+        const WEAPON_FALL_CHANCE = 0.03,
+            SHIELD_FALL_CHANCE = 0.015;
+        const SHOT_SPEED = 6,
+            MIN_SHOT_INTERVAL = 1;
+        const PLAYER_SIZE = 80,
+            BLOCK_SIZE = 30;
+        const HIGH_SCORE_KEY = "crushers_highscore";
+        let highScore = parseInt(localStorage.getItem(HIGH_SCORE_KEY)) || 0;
+        let player, blocks, spawnTimer, spawnRate, score, gameOver, running;
+        let weaponUnlocked = false,
+            weaponFalling = null,
+            shieldFalling = null,
+            shieldActive = false,
+            shieldActivatedTime = 0,
+            shots = [],
+            lastShotTime = 0;
+        const shieldDuration = 10000;
+        let explosions = [];
+        let boss = null;
+        const BOSS_HITS_REQUIRED = 2000;
+        const BOSS_SIZE = 200;
+        const BOSS_SPEED = 1.5;
+        let bossHits = 0;
+        let nextBossScore = 1000;
+
+        function initGame() {
+            score = 0;
+            spawnRate = 50;
+            spawnTimer = spawnRate;
+            blocks = [];
+            gameOver = false;
+            running = true;
+            player = {
+                x: canvas.width / 2 - PLAYER_SIZE / 2,
+                y: canvas.height - 80,
+                w: PLAYER_SIZE,
+                h: PLAYER_SIZE
+            };
+            weaponUnlocked = false;
+            weaponFalling = null;
+            shieldFalling = null;
+            shieldActive = false;
+            shieldActivatedTime = 0;
+            shots = [];
+            lastShotTime = 0;
+            explosions = [];
+            boss = null;
+            bossHits = 0;
+            nextBossScore = 1000;
+            updateScoreDisplay();
+        }
+        const scoreBoard = document.getElementById("scoreBoard");
+
+        function updateScoreDisplay() {
+            scoreBoard.textContent = `Score: ${score} | High Score: ${highScore} | Mode: ${gunModes[currentGunMode][0].toUpperCase()+gunModes[currentGunMode].slice(1)}`;
+        }
+        const homeScreen = document.getElementById("homeScreen"),
+            gameOverScreen = document.getElementById("gameOverScreen"),
+            finalScoreText = document.getElementById("finalScore"),
+            highScoreText = document.getElementById("highScoreDisplay");
+
+        function startGame() {
+            initGame();
+            homeScreen.style.display = "none";
+            gameOverScreen.style.display = "none";
+            scoreBoard.style.display = "block";
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            running = false;
+            gameOver = true;
+            scoreBoard.style.display = "none";
+            gameOverScreen.style.display = "flex";
+            finalScoreText.textContent = `Your Score: ${score}`;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem(HIGH_SCORE_KEY, highScore)
+            }
+            highScoreText.textContent = `High Score: ${highScore}`;
+        }
+
+        function restartGame() {
+            startGame()
+        }
+
+        function goHome() {
+            gameOverScreen.style.display = "none";
+            homeScreen.style.display = "flex"
+        }
+
+        function spawnBoss() {
+            boss = {
+                x: canvas.width / 2 - BOSS_SIZE / 2,
+                y: -BOSS_SIZE,
+                w: BOSS_SIZE,
+                h: BOSS_SIZE,
+                speed: BOSS_SPEED
+            };
+            bossHits = 0;
+        }
+
+        function fireShot() {
+            const mode = gunModes[currentGunMode];
+            if (mode === "straight") {
+                shots.push({
+                    x: player.x + player.w / 2 - BLOCK_SIZE / 4,
+                    y: player.y,
+                    w: BLOCK_SIZE / 2,
+                    h: BLOCK_SIZE / 2,
+                    speed: SHOT_SPEED,
+                    remove: false
+                });
+            } else if (mode === "spray") {
+                for (let angle = -0.3; angle <= 0.3; angle += 0.15) {
+                    shots.push({
+                        x: player.x + player.w / 2 - BLOCK_SIZE / 4,
+                        y: player.y,
+                        w: BLOCK_SIZE / 2,
+                        h: BLOCK_SIZE / 2,
+                        dx: Math.sin(angle) * 4,
+                        dy: -SHOT_SPEED * Math.cos(angle),
+                        remove: false
+                    });
+                }
+            } else if (mode === "aimbot") {
+                let target = [...(blocks || []), boss].filter(b => b && !b.isGreen)[0];
+                if (target) {
+                    let dx = target.x + target.w / 2 - (player.x + player.w / 2);
+                    let dy = target.y + target.h / 2 - player.y;
+                    let len = Math.sqrt(dx * dx + dy * dy);
+                    dx = dx / len * SHOT_SPEED;
+                    dy = dy / len * SHOT_SPEED;
+                    shots.push({
+                        x: player.x + player.w / 2 - BLOCK_SIZE / 4,
+                        y: player.y,
+                        w: BLOCK_SIZE / 2,
+                        h: BLOCK_SIZE / 2,
+                        dx,
+                        dy,
+                        remove: false
+                    });
+                }
+            }
+        }
+
+        function update() {
+            if (!running) return;
+            player.x += (mouseX - (player.x + player.w / 2)) * 0.2;
+            player.x = Math.min(Math.max(player.x, 0), canvas.width - player.w);
+            if (score >= nextBossScore && !boss) {
+                spawnBoss();
+                nextBossScore += 1000;
+            }
+            spawnTimer--;
+            if (spawnTimer <= 0 && !boss) {
+                if (!weaponUnlocked && !weaponFalling && Math.random() < WEAPON_FALL_CHANCE)
+                    weaponFalling = {
+                        x: Math.random() * (canvas.width - BLOCK_SIZE),
+                        y: -BLOCK_SIZE,
+                        w: BLOCK_SIZE,
+                        h: BLOCK_SIZE,
+                        speed: 4 + Math.min(score / 10, 8),
+                        remove: false
+                    };
+                else if (!shieldFalling && !shieldActive && Math.random() < SHIELD_FALL_CHANCE)
+                    shieldFalling = {
+                        x: Math.random() * (canvas.width - BLOCK_SIZE),
+                        y: -BLOCK_SIZE,
+                        w: BLOCK_SIZE,
+                        h: BLOCK_SIZE,
+                        speed: 4 + Math.min(score / 10, 8),
+                        remove: false
+                    };
+                else {
+                    const isGreen = Math.random() < 0.1;
+                    blocks.push({
+                        x: Math.random() * (canvas.width - BLOCK_SIZE),
+                        y: -BLOCK_SIZE,
+                        w: BLOCK_SIZE,
+                        h: BLOCK_SIZE,
+                        speed: 4 + Math.min(score / 10, 8),
+                        isGreen,
+                        remove: false
+                    });
+                }
+                spawnRate = Math.max(20, 50 - Math.floor(score / 5));
+                spawnTimer = spawnRate;
+            }
+            blocks.forEach(b => {
+                b.y += b.speed;
+                if (b.y > canvas.height && !b.isGreen) {
+                    score++;
+                    updateScoreDisplay();
+                    b.remove = true;
+                }
+            });
+            blocks.forEach(b => {
+                if (!b.remove && b.x < player.x + player.w && b.x + b.w > player.x && b.y < player.y + player.h && b.y + b.h > player.y) {
+                    if (b.isGreen) {
+                        score += 100;
+                        updateScoreDisplay();
+                        b.remove = true;
+                    } else if (shieldActive) {
+                        b.remove = true;
+                    } else endGame();
+                }
+            });
+            blocks = blocks.filter(b => !b.remove);
+            if (weaponFalling) {
+                weaponFalling.y += weaponFalling.speed;
+                if (weaponFalling.y + weaponFalling.h >= canvas.height) {
+                    weaponUnlocked = true;
+                    weaponFalling = null;
+                    lastShotTime = 0;
+                }
+            }
+            if (shieldFalling) {
+                shieldFalling.y += shieldFalling.speed;
+                if (shieldFalling.y + shieldFalling.h >= canvas.height) {
+                    shieldActive = true;
+                    shieldActivatedTime = performance.now();
+                    shieldFalling = null;
+                }
+            }
+            if (boss) {
+                boss.y += boss.speed;
+                if (boss.y > canvas.height) {
+                    score = 0;
+                    updateScoreDisplay();
+                    boss = null;
+                }
+            }
+            const now = performance.now();
+            const shotInterval = MIN_SHOT_INTERVAL * 1000 / Math.max(1, score / 10);
+            if (weaponUnlocked && now - lastShotTime > shotInterval) {
+                fireShot();
+                lastShotTime = now;
+            }
+            shots.forEach(shot => {
+                if (shot.dx !== undefined && shot.dy !== undefined) {
+                    shot.x += shot.dx;
+                    shot.y += shot.dy;
+                } else {
+                    shot.y -= shot.speed;
+                }
+                if (shot.y + shot.h < 0 || shot.x < 0 || shot.x > canvas.width) shot.remove = true;
+                blocks.forEach(b => {
+                    if (!b.isGreen && !b.remove && shot.x < b.x + b.w && shot.x + shot.w > b.x && shot.y < b.y + b.h && shot.y + shot.h > b.y) {
+                        b.remove = true;
+                        shot.remove = true;
+                        score += 10;
+                        updateScoreDisplay();
+                        explosions.push({
+                            x: b.x,
+                            y: b.y,
+                            time: performance.now()
+                        });
+                    }
+                });
+                if (boss && shot.x < boss.x + boss.w && shot.x + shot.w > boss.x && shot.y < boss.y + boss.h && shot.y + shot.h > boss.y) {
+                    bossHits++;
+                    shot.remove = true;
+                    if (bossHits >= BOSS_HITS_REQUIRED) {
+                        score += 500;
+                        updateScoreDisplay();
+                        boss = null;
+                    }
+                }
+            });
+            shots = shots.filter(s => !s.remove);
+            if (shieldActive && (performance.now() - shieldActivatedTime > shieldDuration)) {
+                shieldActive = false;
+            }
+            explosions = explosions.filter(e => performance.now() - e.time < 500);
+        }
+
+        function drawShieldTimer() {
+            if (!shieldActive) return;
+            const timerX = 60,
+                timerY = canvas.height - 60,
+                radius = 30,
+                lineWidth = 5;
+            const elapsed = performance.now() - shieldActivatedTime;
+            const remaining = Math.max(0, shieldDuration - elapsed);
+            const fraction = remaining / shieldDuration;
+            ctx.beginPath();
+            ctx.arc(timerX, timerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = "rgba(0,255,234,0.2)";
+            ctx.lineWidth = lineWidth;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.strokeStyle = "#00ffea";
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = "round";
+            ctx.arc(timerX, timerY, radius, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * fraction, false);
+            ctx.stroke();
+            ctx.fillStyle = "#00ffea";
+            ctx.font = "bold 24px 'Orbitron', monospace, sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(Math.ceil(remaining / 1000), timerX, timerY);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (playerSprite.complete) ctx.drawImage(playerSprite, player.x, player.y, player.w, player.h);
+            else {
+                ctx.fillStyle = "#00ffff";
+                ctx.fillRect(player.x, player.y, player.w, player.h)
+            }
+            blocks.forEach(b => {
+                if (!b.remove) {
+                    if (b.isGreen) {
+                        if (greenOrbSprite.complete) ctx.drawImage(greenOrbSprite, b.x, b.y, b.w, b.h);
+                        else {
+                            ctx.fillStyle = "#0f0";
+                            ctx.fillRect(b.x, b.y, b.w, b.h)
+                        }
+                    } else {
+                        if (redBlockSprite.complete) ctx.drawImage(redBlockSprite, b.x, b.y, b.w, b.h);
+                        else {
+                            ctx.fillStyle = "#f00";
+                            ctx.fillRect(b.x, b.y, b.w, b.h)
+                        }
+                    }
+                }
+            });
+            if (weaponFalling) {
+                if (weaponPreviewImg.complete) ctx.drawImage(weaponPreviewImg, weaponFalling.x, weaponFalling.y, weaponFalling.w, weaponFalling.h);
+                else {
+                    ctx.fillStyle = "#0ff";
+                    ctx.fillRect(weaponFalling.x, weaponFalling.y, weaponFalling.w, weaponFalling.h)
+                }
+            }
+            if (shieldFalling) {
+                if (shieldItemImg.complete) ctx.drawImage(shieldItemImg, shieldFalling.x, shieldFalling.y, shieldFalling.w, shieldFalling.h);
+                else {
+                    ctx.fillStyle = "#00f";
+                    ctx.fillRect(shieldFalling.x, shieldFalling.y, shieldFalling.w, shieldFalling.h)
+                }
+            }
+            shots.forEach(shot => {
+                if (weaponImg.complete) ctx.drawImage(weaponImg, shot.x, shot.y, shot.w, shot.h);
+                else {
+                    ctx.fillStyle = "#0ff";
+                    ctx.fillRect(shot.x, shot.y, shot.w, shot.h)
+                }
+            });
+            if (shieldActive && shieldImg.complete) ctx.drawImage(shieldImg, player.x + player.w / 2 - 32, player.y - 40, 64, 64);
+            if (boss) {
+                ctx.fillStyle = "#a52a2a";
+                ctx.beginPath();
+                ctx.arc(boss.x + boss.w / 2, boss.y + boss.h / 2, boss.w / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#fff";
+                ctx.font = "20px Orbitron";
+                ctx.textAlign = "center";
+                ctx.fillText(`${BOSS_HITS_REQUIRED-bossHits} hits left`, boss.x + boss.w / 2, boss.y - 10);
+            }
+            drawShieldTimer();
+            explosions.forEach(e => {
+                ctx.drawImage(explosionImg, e.x, e.y, 64, 64)
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            if (!gameOver) requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+
+</html>
