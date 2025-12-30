@@ -1,1 +1,0 @@
-No Content: https://burritoedition.github.io/emu/Minecraft/web/src/net/lax1dude/eaglercraft/glemu/vector/Vector4f.java

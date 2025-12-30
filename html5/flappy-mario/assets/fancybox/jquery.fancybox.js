@@ -1,1 +1,0 @@
-No Content: https://flappybird.net/mario/assets/fancybox/jquery.fancybox.js?v=2.1.5
