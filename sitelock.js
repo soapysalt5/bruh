@@ -24,6 +24,7 @@
         "hacker-114.github.io": "//dashmetry.github.io",
         "evergreenps.github.io": "//dashmetry.github.io",
         "orson-sanders.github.io": "//dashmetry.github.io",
+        "//tunnel-rush.io": "//marty-games.github.io",
 
         "2playergames.gitlab.io": "//dc.gg/martin/",
         "ubg6.gitlab.io": "//dc.gg/martin/",
