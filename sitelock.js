@@ -106,22 +106,6 @@
     }
 
     /* =========================
-       location.assign / replace
-    ========================== */
-    const originalAssign = window.location.assign;
-    const originalReplace = window.location.replace;
-
-    window.location.assign = function(url) {
-        const redirect = checkRedirect(url);
-        return originalAssign.call(window.location, redirect || url);
-    };
-
-    window.location.replace = function(url) {
-        const redirect = checkRedirect(url);
-        return originalReplace.call(window.location, redirect || url);
-    };
-
-    /* =========================
        location.href SETTER
     ========================== */
     const locationProto = Object.getPrototypeOf(window.location);
