@@ -2,21 +2,19 @@
 (() => {
     "use strict";
 
-    /* =========================
-       BLOCKED DOMAINS → REDIRECTS
-    ========================== */
+    /* BLOCKED DOMAINS → REDIRECTS */
     const BLOCKED_DOMAINS = {
-        "geometrylite.io": "//dashmetry.github.io",
-        "geometrylitegame.io": "//dashmetry.github.io",
-        "geometrydash.io": "//dashmetry.github.io",
-        "geometrydashlite.io": "//dashmetry.github.io",
-        "geometrydashlite.online": "//dashmetry.github.io",
-        "geometrydashsubzero.io": "//dashmetry.github.io",
-        "geometrydashmeltdown.io": "//dashmetry.github.io",
-        "geometrydashbloodbath.io": "//dashmetry.github.io",
-        "geometrydashs.io": "//dashmetry.github.io",
-        "geometrygames.io": "//dashmetry.github.io",
-        "dashmetry.io": "//dashmetry.github.io",
+        "//geometrylite.io": "//dashmetry.github.io",
+        "//geometrylitegame.io": "//dashmetry.github.io",
+        "//geometrydash.io": "//dashmetry.github.io",
+        "//geometrydashlite.io": "//dashmetry.github.io",
+        "//geometrydashlite.online": "//dashmetry.github.io",
+        "//geometrydashsubzero.io": "//dashmetry.github.io",
+        "//geometrydashmeltdown.io": "//dashmetry.github.io",
+        "//geometrydashbloodbath.io": "//dashmetry.github.io",
+        "//geometrydashs.io": "//dashmetry.github.io",
+        "//geometrygames.io": "//dashmetry.github.io",
+        "//dashmetry.io": "//dashmetry.github.io",
 
         "//1games.io": "//dashmetry.github.io",
         "//azgames.io": "//dashmetry.github.io",
@@ -27,18 +25,16 @@
         "//tunnel-rush.io": "//marty-games.github.io",
         "//st.8games.net/": "//marty-games.github.io",
 
-        "2playergames.gitlab.io": "//dc.gg/martin/",
-        "ubg6.gitlab.io": "//dc.gg/martin/",
-        "ubg98.github.io": "//dc.gg/martin/",
-        "dressupgames.gitlab.io": "//dc.gg/martin/",
-        "dc.gg": "//dc.gg/martin/",
-        "discord.com": "//dc.gg/martin/",
-        "discord.gg": "//dc.gg/martin/"
+        "//2playergames.gitlab.io": "//dc.gg/martin/",
+        "//ubg6.gitlab.io": "//dc.gg/martin/",
+        "//ubg98.github.io": "//dc.gg/martin/",
+        "//dressupgames.gitlab.io": "//dc.gg/martin/",
+        "//dc.gg": "//dc.gg/martin/",
+        "//discord.com": "//dc.gg/martin/",
+        "//discord.gg": "//dc.gg/martin/"
     };
 
-    /* =========================
-       URL CHECK HELPER
-    ========================== */
+    /* URL CHECK HELPER */
     function checkRedirect(url) {
         try {
             const hostname = new URL(url, location.href).hostname;
@@ -48,9 +44,7 @@
         }
     }
 
-    /* =========================
-       IFRAME POPUP BYPASS BLOCK
-    ========================== */
+    /* IFRAME POPUP BYPASS BLOCK */
     const originalCreateElement = document.createElement;
 
     document.createElement = function(tagName) {
@@ -72,9 +66,7 @@
         return element;
     };
 
-    /* =========================
-       window.open PROTECTION
-    ========================== */
+    /* window.open PROTECTION */
     const originalWindowOpen = window.open;
 
     window.open = function(url, ...args) {
@@ -93,9 +85,7 @@
         return originalWindowOpen.call(window, redirect || url, ...args);
     };
 
-    /* =========================
-       Unity Application.OpenURL
-    ========================== */
+    /* Unity Application.OpenURL */
     if (window.Application?.OpenURL) {
         const originalAppOpen = window.Application.OpenURL;
 
@@ -105,9 +95,7 @@
         };
     }
 
-    /* =========================
-       location.href SETTER
-    ========================== */
+    /* location.href SETTER */
     const locationProto = Object.getPrototypeOf(window.location);
 
     Object.defineProperty(locationProto, "href", {
@@ -117,9 +105,7 @@
         }
     });
 
-    /* =========================
-       <a> CLICK INTERCEPTION
-    ========================== */
+    /* <a> CLICK INTERCEPTION */
     document.addEventListener("click", (event) => {
         const link = event.target.closest("a[href]");
         if (!link) return;
@@ -131,9 +117,7 @@
         window.location.assign(redirect);
     });
 
-    /* =========================
-       META REFRESH BLOCKING
-    ========================== */
+    /* META REFRESH BLOCKING */
     document
         .querySelectorAll('meta[http-equiv="refresh"]')
         .forEach((meta) => {
@@ -147,9 +131,7 @@
             }
         });
 
-    /* =========================
-       window.navigate BLOCKER
-    ========================== */
+    /* window.navigate BLOCKER */
     if (window.navigate) {
         const originalNavigate = window.navigate;
 
