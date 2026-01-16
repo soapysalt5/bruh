@@ -21,7 +21,7 @@
         "//poki.com": "//dashmetry.github.io",
         "//hacker-114.github.io": "//dashmetry.github.io",
         "//evergreenps.github.io": "//dashmetry.github.io",
-        "//orson-sanders.github.io": "//dashmetry.github.io",
+        "//orson-sander.github.io": "//dashmetry.github.io",
         "//tunnel-rush.io": "//marty-games.github.io",
         "//st.8games.net/": "//marty-games.github.io",
 
