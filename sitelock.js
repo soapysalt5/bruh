@@ -25,13 +25,13 @@
         "//tunnel-rush.io": "//marty-games.github.io",
         "//st.8games.net/": "//marty-games.github.io",
 
-        "//2playergames.gitlab.io": "//dc.gg/martin/",
-        "//ubg6.gitlab.io": "//dc.gg/martin/",
-        "//ubg98.github.io": "//dc.gg/martin/",
-        "//dressupgames.gitlab.io": "//dc.gg/martin/",
-        "//dc.gg": "//dc.gg/martin/",
-        "//discord.com": "//dc.gg/martin/",
-        "//discord.gg": "//dc.gg/martin/"
+        "//2playergames.gitlab.io": "//discord.gg/F8kc4FKjnw",
+        "//ubg6.gitlab.io": "//discord.gg/F8kc4FKjnw",
+        "//ubg98.github.io": "//discord.gg/F8kc4FKjnw",
+        "//dressupgames.gitlab.io": "//discord.gg/F8kc4FKjnw",
+        "//dc.gg": "//discord.gg/F8kc4FKjnw",
+        "//discord.com": "//discord.gg/F8kc4FKjnw",
+        "//discord.gg": "//discord.gg/F8kc4FKjnw"
     };
 
     /* URL CHECK HELPER */
