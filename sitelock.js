@@ -31,7 +31,7 @@
         "dressupgames.gitlab.io": "//discord.gg/F8kc4FKjnw",
         "dc.gg": "//discord.gg/F8kc4FKjnw",
         "discord.com": "//discord.gg/F8kc4FKjnw",
-        "discord.gg": "//discord.com/F8kc4FKjnw"
+        "discord.gg": "//discord.com/invite/F8kc4FKjnw"
     };
 
     /* URL CHECK HELPER */
