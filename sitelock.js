@@ -44,7 +44,7 @@
         }
     }
 
-    /* IFRAME POPUP BYPASS BLOCK */
+    /* IFRAME POPUP REDIRECT (NOT BLOCK) */
     const originalCreateElement = document.createElement;
 
     document.createElement = function(tagName) {
@@ -54,9 +54,9 @@
             Object.defineProperty(element, "contentWindow", {
                 get() {
                     return {
-                        open() {
-                            console.warn("Blocked iframe-based popup.");
-                            return null;
+                        open(url, ...args) {
+                            const redirect = checkRedirect(url);
+                            return window.open(redirect || url, ...args);
                         }
                     };
                 }
@@ -66,26 +66,22 @@
         return element;
     };
 
-    /* window.open PROTECTION */
+    /* window.open REDIRECT */
     const originalWindowOpen = window.open;
 
     window.open = function(url, ...args) {
         const redirect = checkRedirect(url);
 
-        if (window.frameElement) {
-            console.warn("Blocked popup from iframe context.");
-            return null;
-        }
-
+        // still prevent weird object-bound calls
         if (this && this !== window) {
-            console.warn("Blocked cross-context popup attempt.");
-            return null;
+            console.warn("Blocked invalid window.open context");
+            return originalWindowOpen.call(window, redirect || "about:blank", ...args);
         }
 
         return originalWindowOpen.call(window, redirect || url, ...args);
     };
 
-    /* Unity Application.OpenURL */
+    /* Unity Application.OpenURL REDIRECT */
     if (window.Application?.OpenURL) {
         const originalAppOpen = window.Application.OpenURL;
 
@@ -117,7 +113,7 @@
         window.location.assign(redirect);
     });
 
-    /* META REFRESH BLOCKING */
+    /* META REFRESH REDIRECT */
     document
         .querySelectorAll('meta[http-equiv="refresh"]')
         .forEach((meta) => {
@@ -131,7 +127,7 @@
             }
         });
 
-    /* window.navigate BLOCKER */
+    /* window.navigate REDIRECT */
     if (window.navigate) {
         const originalNavigate = window.navigate;
 
