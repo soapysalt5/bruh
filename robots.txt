@@ -1,5 +1,15 @@
+# File made By Drag00nKnight999
+
 User-agent: *
 Disallow: /admin.html
 Disallow: /404.html
 Disallow: /403.html
+Disallow: /admin.html
+Disallow: /ads.txt
+Disallow: /favicon.ico
+Disallow: /robots.txt
+Disallow: /sitelock.js
+Disallow: /sitemap.xml
+Disallow: /style.css
+Disallow: /ytgame.js
 Sitemap: https://marty-games.github.io/sitemap.xml
