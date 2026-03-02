@@ -6,9 +6,94 @@
     <priority>1.0</priority>
   </url>
 
-  <url>
+   <url>
     <loc>https://marty-games.github.io/index.html</loc>
     <priority>0.9</priority>
   </url>
+  
+    <url>
+    <loc>https://marty-games.github.io/embed/</loc>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://marty-games.github.io/embed/godot/buckshot-roulette/</loc>
+    <priority>0.8</priority>
+  </url>
 
+  <url>
+    <loc>https://marty-games.github.io/embed/html5/</loc>
+    <priority>0.8</priority>
+  </url>
+
+    <url>
+    <loc>https://marty-games.github.io/embed/unity/</loc>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://marty-games.github.io/embed/html5/deltarune/</loc>
+    <priority>0.7</priority>
+  </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/html5/minecraft-tynker/</loc>
+    <priority>0.7</priority>
+   </url>
+  
+     <url>
+    <loc>https://marty-games.github.io/embed/html5/spacebar-clicker/</loc>
+    <priority>0.7</priority>
+   </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/unity/doomz-io/</loc>
+    <priority>0.7</priority>
+  </url>
+
+    <url>
+    <loc>https://marty-games.github.io/embed/unity/geometry-dash-breeze/</loc>
+    <priority>0.7</priority>
+  </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/unity/geometry-dash-subzero/</loc>
+    <priority>0.7</priority>
+  </url>
+  
+    <url>
+    <loc>https://marty-games.github.io/embed/unity/hollow-knight/</loc>
+    <priority>0.7</priority>
+  </url>
+
+    <url>
+    <loc>https://marty-games.github.io/embed/unity/lobotomy-dash-platformer/</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://marty-games.github.io/embed/unity/real-flight-simulator/</loc>
+    <priority>0.7</priority>
+  </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/unity/repo/</loc>
+    <priority>0.7</priority>
+  </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/unity/rocket-goal/</loc>
+    <priority>0.7</priority>
+  </url>
+
+    <url>
+    <loc>https://marty-games.github.io/embed/unity/saul-goodman-run/</loc>
+    <priority>0.7</priority>
+  </url>
+
+   <url>
+    <loc>https://marty-games.github.io/embed/unity/sniper-baby-in-vietnam/</loc>
+    <priority>0.7</priority>
+  </url>
+  
 </urlset>
