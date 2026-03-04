@@ -98,16 +98,16 @@
             mergeFiles(getParts("Build/NewestBuild.data.gz", 1, 16))
         ]).then(([wasmUrl, dataUrl]) => {
             container.hidden = false;
-            var buildUrl = "Build";
+            var buildUrl = "https://cdn.jsdelivr.net/gh/marty-games/mga-unity@main/repo/Build";
             var loaderUrl = buildUrl + "/NewestBuild.loader.js";
             var config = {
                 dataUrl: dataUrl,
                 frameworkUrl: buildUrl + "/NewestBuild.framework.js",
                 codeUrl: wasmUrl,
                 streamingAssetsUrl: "StreamingAssets",
-                companyName: "Stupid Game",
+                companyName: "Semiwork and Marty Games",
                 productName: "R.E.P.O",
-                productVersion: "0.1"
+                productVersion: "1.0"
             };
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                 var meta = document.createElement('meta');
