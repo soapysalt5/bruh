@@ -82,6 +82,14 @@
     </style>
 </head>
 <body>
+<div class="search-container">
+  <input type="text" id="gameSearch" placeholder="Search games..." onkeyup="searchGames()">
+</div>
+
+    <div class="game-card">
+  <a href="embed/html5/deltarune/index.html">Deltarune</a>
+</div>
+
 
 <canvas id="bg-canvas"></canvas>
 
@@ -188,6 +196,21 @@
     init();
     animate();
 </script>
+<script>
+function searchGames() {
+  let input = document.getElementById("gameSearch").value.toLowerCase();
+  let games = document.getElementsByClassName("game-card");
 
+  for (let i = 0; i < games.length; i++) {
+    let title = games[i].textContent.toLowerCase();
+
+    if (title.includes(input)) {
+      games[i].style.display = "";
+    } else {
+      games[i].style.display = "none";
+    }
+  }
+}
+</script>
 </body>
 </html>
