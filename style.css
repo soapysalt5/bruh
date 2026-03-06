@@ -13,14 +13,25 @@ footer {
 }
 
 .search-container {
-  text-align: center;
-  margin: 20px;
+    margin-bottom: 10px;
 }
 
 #gameSearch {
-  width: 300px;
-  padding: 10px;
-  border-radius: 20px;
-  border: none;
-  font-size: 16px;
+    width: 320px;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    background: #111;
+    color: white;
+
+    box-shadow:
+        0 0 5px #0ff,
+        0 0 10px #0ff,
+        0 0 20px #0ff;
+}
+
+#gameSearch::placeholder {
+    color: #aaa;
 }
