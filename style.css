@@ -11,3 +11,16 @@ p {
 footer {
   color: white;
 }
+
+.search-container {
+  text-align: center;
+  margin: 20px;
+}
+
+#gameSearch {
+  width: 300px;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+}
