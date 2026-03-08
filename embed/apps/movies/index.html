@@ -1,554 +1,196 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Martini's Movies</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg: #0b0b0b;
-            --card: #121212;
-            --gold: #d4af37;
-            --gold-soft: rgba(212, 175, 55, .15);
-            --text: #f5f5f5;
-            --muted: #aaa;
-            --border: #222;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: Inter, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background: radial-gradient(1200px 600px at top, var(--gold-soft), transparent 60%), var(--bg);
-            color: var(--text);
-        }
-
-        /* BACKGROUND CANVAS */
-
-        #bg-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: -2;
-        }
-
-        /* LOADER */
-
-        #loader {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 22px;
-            background: black;
-            z-index: 999;
-        }
-
-        #title {
-            font-size: 3em;
-            font-weight: bold;
-            text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
-        }
-
-        #progress-bar {
-            width: 420px;
-            height: 12px;
-            background: #111;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 3px #0ff, 0 0 8px rgba(0, 255, 255, .4);
-        }
-
-        #progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #0ff;
-            border-radius: 10px;
-            transition: width .3s;
-            box-shadow: 0 0 10px #0ff;
-        }
-
-        #loading-text {
-            font-size: 18px;
-        }
-
-        /* NAV */
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, .6);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav {
-            max-width: 1400px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 20px;
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: var(--gold);
-        }
-
-        .search {
-            width: 360px;
-            max-width: 60vw;
-        }
-
-        .search input {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-        }
-
-        /* GRID */
-
-        main {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: linear-gradient(180deg, var(--card), #0e0e0e);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: .25s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, .25);
-            border-color: var(--gold);
-        }
-
-        .card img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-        }
-
-        .card .info {
-            padding: 10px;
-            text-align: center;
-        }
-
-        .card .title {
-            font-size: .9rem;
-            font-weight: 600;
-        }
-
-        .card .meta {
-            font-size: .75rem;
-            color: var(--gold);
-        }
-
-        /* LOAD MORE */
-
-        .load-more {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 240px;
-            background: var(--gold-soft);
-            color: var(--gold);
-            font-weight: 600;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .load-more:hover {
-            background: var(--gold);
-            color: #000;
-        }
-
-        .status {
-            margin: 40px 0;
-            text-align: center;
-            color: var(--muted);
-        }
-
-        /* MODAL */
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .85);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .modal.open {
-            display: flex;
-        }
-
-        .modal-box {
-            width: 90%;
-            max-width: 1000px;
-            background: #000;
-            border: 1px solid var(--gold);
-            border-radius: 14px;
-            overflow: hidden;
-        }
-
-        .modal-top {
-            display: flex;
-            justify-content: flex-end;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, var(--gold), #b8962e);
-            color: #000;
-        }
-
-        .modal iframe {
-            width: 100%;
-            height: 560px;
-            border: none;
-            background: #000;
-        }
-
-        .close {
-            cursor: pointer;
-            font-weight: 700;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#0b0b0b;
+  --card:#121212;
+  --gold:#d4af37;
+  --gold-soft:rgba(212,175,55,.15);
+  --text:#f5f5f5;
+  --muted:#aaa;
+  --border:#222;
+}
+*{box-sizing:border-box;font-family:Inter,sans-serif}
+body{margin:0;background:radial-gradient(1200px 600px at top,var(--gold-soft),transparent 60%),var(--bg);color:var(--text)}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(0,0,0,.6);border-bottom:1px solid var(--border)}
+.nav{max-width:1400px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.logo{font-weight:700;font-size:1.4rem;color:var(--gold);letter-spacing:.5px}
+.search{position:relative;width:360px;max-width:60vw}
+.search input{width:100%;padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text)}
+main{max-width:1400px;margin:30px auto;padding:0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px}
+.card{background:linear-gradient(180deg,var(--card),#0e0e0e);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:.25s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(212,175,55,.25);border-color:var(--gold)}
+.card img{width:100%;height:240px;object-fit:cover}
+.card .info{padding:10px;text-align:center}
+.card .title{font-size:.9rem;font-weight:600;line-height:1.3}
+.card .meta{font-size:.75rem;color:var(--gold)}
+.load-more{display:flex;align-items:center;justify-content:center;height:240px;background:var(--gold-soft);color:var(--gold);font-weight:600;border-radius:14px;cursor:pointer;transition:.2s}
+.load-more:hover{background:var(--gold);color:#000}
+.status{margin:40px 0;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.modal-box{width:90%;max-width:1000px;background:#000;border:1px solid var(--gold);border-radius:14px;overflow:hidden}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(135deg,var(--gold),#b8962e);color:#000}
+.modal iframe{width:100%;height:560px;border:none;background:#000}
+.providers{display:flex;gap:10px;flex-wrap:wrap}
+.providers button{border:none;border-radius:999px;padding:10px 18px;cursor:pointer;background:#000;color:var(--gold);border:1px solid #000;font-size:0.9rem;transition:.2s}
+.providers button.active{background:var(--gold);color:#000}
+.close{cursor:pointer;font-weight:700}
+.active-btn{background:var(--gold);color:#000;border:1px solid var(--gold);padding:10px 18px;border-radius:999px;font-size:0.95rem}
+.inactive-btn{background:#000;color:var(--gold);border:1px solid var(--border);padding:10px 18px;border-radius:999px;font-size:0.95rem}
+</style>
 </head>
-
 <body>
-
-    <canvas id="bg-canvas"></canvas>
-
-    <div id="loader">
-        <div id="title">Movie Library</div>
-
-        <div id="progress-bar">
-            <div id="progress-fill"></div>
-        </div>
-
-        <div id="loading-text">Loading movies...</div>
+<header>
+  <div class="nav">
+    <div class="logo">Movies</div>
+    <div style="display:flex;gap:10px">
+      <button id="moviesBtn" class="active-btn">Movies</button>
+      <button id="tvBtn" class="inactive-btn">TV Shows</button>
     </div>
-
-    <header>
-        <div class="nav">
-            <div class="logo">Martini's Movies</div>
-
-            <div class="search">
-                <input id="search" placeholder="Search movies...">
-            </div>
-
-        </div>
-    </header>
-
-    <main>
-
-        <div class="grid" id="grid"></div>
-
-        <div class="status" id="status">Loading…</div>
-
-    </main>
-
-    <div class="modal" id="modal">
-
-        <div class="modal-box">
-
-            <div class="modal-top">
-                <div class="close" onclick="closeModal()">✕</div>
-            </div>
-
-            <iframe id="player"></iframe>
-
-        </div>
+    <div class="search"><input id="search" placeholder="Search movies or TV shows..." /></div>
+  </div>
+</header>
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="status" id="status">Loading…</div>
+</main>
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-top">
+      <div class="providers" id="providers"></div>
+      <div class="close" onclick="closeModal()">✕</div>
     </div>
-
-    <script>
-        /* NEW PARTICLE BACKGROUND */
-
-        const canvas = document.getElementById("bg-canvas");
-        const ctx = canvas.getContext("2d");
-
-        let particlesArray = [];
-
-        const MAX_PARTICLES = 60;
-        const MAX_DISTANCE = 110;
-
-        const COLORS = ["#00ffff", "#ff00ff", "#00ff9c", "#7a5cff", "#ffd700"];
-
-        function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            particlesArray = [];
-
-            for (let i = 0; i < MAX_PARTICLES; i++) {
-                particlesArray.push(new Particle());
-            }
-        }
-
-        class Particle {
-
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = (Math.random() - 0.5) * 1.2;
-                this.speedY = (Math.random() - 0.5) * 1.2;
-                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-            }
-
-            update() {
-
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-
-            }
-
-            draw() {
-
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 8;
-
-                ctx.fillStyle = this.color;
-                ctx.fill();
-
-            }
-
-        }
-
-        function hexToRgb(hex) {
-
-            let c = hex.replace("#", "");
-
-            if (c.length === 3) {
-                c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
-            }
-
-            const bigint = parseInt(c, 16);
-
-            const r = (bigint >> 16) & 255;
-            const g = (bigint >> 8) & 255;
-            const b = bigint & 255;
-
-            return `${r},${g},${b}`;
-
-        }
-
-        function connect() {
-
-            for (let a = 0; a < particlesArray.length; a++) {
-
-                for (let b = a + 1; b < particlesArray.length; b++) {
-
-                    const dx = particlesArray[a].x - particlesArray[b].x;
-                    const dy = particlesArray[a].y - particlesArray[b].y;
-
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < MAX_DISTANCE) {
-
-                        const opacity = 0.6 - distance / (2 * MAX_DISTANCE);
-
-                        ctx.beginPath();
-
-                        ctx.strokeStyle = `rgba(${hexToRgb(particlesArray[a].color)},${opacity})`;
-
-                        ctx.lineWidth = 1.2;
-
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-
-                        ctx.stroke();
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        function animate() {
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particlesArray.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            connect();
-
-            requestAnimationFrame(animate);
-
-        }
-
-        window.addEventListener("resize", init);
-
-        init();
-        animate();
-
-        /* MOVIE APP */
-
-        const IMG = "https://image.tmdb.org/t/p/w500";
-
-        const grid = document.getElementById("grid");
-        const modal = document.getElementById("modal");
-        const player = document.getElementById("player");
-        const searchInput = document.getElementById("search");
-        const progressFill = document.getElementById("progress-fill");
-
-        let currentPage = 1;
-        let currentList = [];
-
-        async function loadPopular(loadMore = false) {
-
-            if (!loadMore) {
-                currentPage = 1;
-                currentList = [];
-            }
-
-            progressFill.style.width = "30%";
-
-            const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=2713804610e1e236b1cf44bfac3a7776&page=${currentPage}`);
-
-            progressFill.style.width = "60%";
-
-            const data = await res.json();
-
-            currentList = currentList.concat(data.results.filter(m => m.poster_path));
-
-            renderMovies(currentList);
-
-            currentPage++;
-
-            progressFill.style.width = "100%";
-
-            setTimeout(() => {
-                document.getElementById("loader").style.display = "none";
-            }, 500);
-
-        }
-
-        function renderMovies(list) {
-
-            grid.innerHTML = "";
-
-            list.forEach(m => {
-
-                const card = document.createElement("div");
-
-                card.className = "card";
-
-                card.innerHTML = `
-<img src="${IMG+m.poster_path}">
-<div class="info">
-<div class="title">${m.title}</div>
-<div class="meta">${m.vote_average}/10</div>
+    <iframe id="player"></iframe>
+  </div>
 </div>
-`;
+<script>
+const IMG="https://image.tmdb.org/t/p/w500";
+const grid=document.getElementById('grid');
+const modal=document.getElementById('modal');
+const player=document.getElementById('player');
+const providersEl=document.getElementById('providers');
+const statusEl=document.getElementById('status');
+const searchInput=document.getElementById('search');
 
-                card.onclick = () => openMovie(m);
+const PROVIDERS=[
+ {id:'vidplus',name:'Vidplus',movie:'https://player.vidplus.to/embed/movie/{id}',tv:'https://player.vidplus.to/embed/tv/{id}/{s}/{e}'},
+ {id:'vidify',name:'Vidify',movie:'https://player.vidify.top/embed/movie/{id}?autoplay=true',tv:'https://player.vidify.top/embed/tv/{id}/{s}/{e}'},
+ {id:'vidfast',name:'Vidfast',movie:'https://vidfast.to/embed/movie/{id}',tv:'https://vidfast.to/embed/tv/{id}/{s}/{e}'},
+ {id:'vidsrccx',name:'VidsrcCX',movie:'https://vidsrc.cx/embed/movie/{id}',tv:'https://vidsrc.cx/embed/tv/{id}/{s}/{e}'},
+ {id:'vidsrcicu',name:'VidSrc.icu',movie:'https://vidsrc.icu/embedv2/movie/{id}',tv:'https://vidsrc.icu/embedv2/tv/{id}/{s}/{e}'}
+];
 
-                grid.appendChild(card);
+let currentProvider=localStorage.getItem('provider')||'vidplus';
+let currentMovie=null;
+let mode='movie';
+let currentPage=1;
+let currentList=[];
 
-            });
+const FALLBACK_MOVIES=[
+ {id:157336,title:'Interstellar',poster_path:'/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',vote_average:8.4},
+ {id:155,title:'The Dark Knight',poster_path:'/qJ2tW6WMUDux911r6m7haRef0WH.jpg',vote_average:8.5},
+ {id:27205,title:'Inception',poster_path:'/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',vote_average:8.3}
+];
 
-            const loadMore = document.createElement("div");
+function renderMovies(list){
+ grid.innerHTML='';
+ list.forEach(m=>{const d=document.createElement('div');d.className='card';
+ const title=m.title||m.name;
+ d.innerHTML=`<img src="${IMG+m.poster_path}"><div class="info"><div class="title">${title}</div><div class="meta">${m.vote_average||'N/A'}/10</div></div>`;
+ d.onclick=()=>openMovie(m);
+ grid.appendChild(d);
+ });
+ const loadMore=document.createElement('div');
+ loadMore.className='load-more';
+ loadMore.textContent='Load More';
+ loadMore.onclick=()=>loadPopular(true);
+ grid.appendChild(loadMore);
+}
 
-            loadMore.className = "load-more";
-            loadMore.textContent = "Load More";
+async function loadPopular(loadMore=false){
+ if(!loadMore) { currentPage=1; currentList=[]; }
+ const endpoint=`https://api.themoviedb.org/3/${mode==='movie'?'movie':'tv'}/popular?api_key=2713804610e1e236b1cf44bfac3a7776&page=${currentPage}`;
+ try{
+  const res=await fetch(endpoint);
+  if(!res.ok) throw new Error('HTTP error');
+  const data=await res.json();
+  currentList=currentList.concat(data.results.filter(m=>m.poster_path));
+  renderMovies(currentList);
+  currentPage++;
+ }catch(e){
+  console.warn('TMDB fetch failed, using fallback data',e);
+  statusEl.textContent='Live data unavailable — showing featured movies';
+  renderMovies(FALLBACK_MOVIES);
+ }
+}
 
-            loadMore.onclick = () => loadPopular(true);
+function openMovie(movie){
+ currentMovie=movie;
+ modal.classList.add('open');
+ renderProviders();
+ loadProvider(currentProvider);
+}
+function closeModal(){modal.classList.remove('open');player.src='';}
 
-            grid.appendChild(loadMore);
+function renderProviders(){
+ providersEl.innerHTML='';
+ PROVIDERS.forEach(p=>{const b=document.createElement('button');b.textContent=p.name;
+ if(p.id===currentProvider)b.classList.add('active');
+ b.onclick=()=>{currentProvider=p.id;localStorage.setItem('provider',p.id);renderProviders();loadProvider(p.id)};
+ providersEl.appendChild(b);});
+}
+function loadProvider(id){
+ const p=PROVIDERS.find(x=>x.id===id);
+ if(!p||!currentMovie)return;
+ if(mode==='movie'){
+  player.src=p.movie.replace('{id}',currentMovie.id);
+ }else{
+  player.src=p.tv.replace('{id}',currentMovie.id).replace('{s}',1).replace('{e}',1);
+ }
+}
 
-        }
+const moviesBtn=document.getElementById('moviesBtn');
+const tvBtn=document.getElementById('tvBtn');
 
-        function openMovie(movie) {
+function updateButtons(){
+  if(mode==='movie'){
+    moviesBtn.classList.add('active-btn');moviesBtn.classList.remove('inactive-btn');
+    tvBtn.classList.add('inactive-btn');tvBtn.classList.remove('active-btn');
+  } else {
+    tvBtn.classList.add('active-btn');tvBtn.classList.remove('inactive-btn');
+    moviesBtn.classList.add('inactive-btn');moviesBtn.classList.remove('active-btn');
+  }
+}
 
-            modal.classList.add("open");
+moviesBtn.addEventListener('click',()=>{mode='movie';updateButtons();loadPopular();});
+tvBtn.addEventListener('click',()=>{mode='tv';updateButtons();loadPopular();});
 
-            player.src = `https://vidsrc.cx/embed/movie/${movie.id}`;
+searchInput.addEventListener('input',async()=>{
+ const query=searchInput.value.trim();
+ if(query.length<2) { loadPopular(); return; }
+ const endpoint=`https://api.themoviedb.org/3/search/${mode}?api_key=2713804610e1e236b1cf44bfac3a7776&query=${encodeURIComponent(query)}`;
+ try{
+  const res=await fetch(endpoint);
+  if(!res.ok) throw new Error('HTTP error');
+  const data=await res.json();
+  currentList=data.results.filter(m=>m.poster_path);
+  renderMovies(currentList);
+ }catch(e){console.warn('Search failed',e);statusEl.textContent='Search failed';}
+});
 
-        }
-
-        function closeModal() {
-
-            modal.classList.remove("open");
-
-            player.src = "";
-
-        }
-
-        /* SEARCH */
-
-        searchInput.addEventListener("input", async () => {
-
-            const query = searchInput.value.trim();
-
-            if (query.length < 2) {
-                loadPopular();
-                return;
-            }
-
-            const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=2713804610e1e236b1cf44bfac3a7776&query=${encodeURIComponent(query)}`);
-
-            const data = await res.json();
-
-            currentList = data.results.filter(m => m.poster_path);
-
-            renderMovies(currentList);
-
-        });
-
-        /* START */
-
-        loadPopular();
-    </script>
-
+updateButtons();
+loadPopular();
+</script>
 </body>
-
 </html>
