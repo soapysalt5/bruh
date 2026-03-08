@@ -79,6 +79,10 @@
             background: #e69917;
             transform: scale(1.1);
         }
+        
+        .game-card {
+    display: none;
+}
     </style>
 </head>
 <body>
@@ -98,13 +102,37 @@
 </div>
 
 <div class="game-card">
-    <a href="embed/godot/deltarune/index.html">Deltarune</a>
+    <a href="embed/gamemaker/deltarune/index.html">Deltarune</a>
+</div>
+
+    <div class="game-card">
+    <a href="embed/gamemaker/undertale/index.html">Undertale</a>
 </div>
 
 <div class="game-card">
     <a href="embed/html5/minecraft-tynker/index.html">Minecraft</a>
 </div>
 
+    <div class="game-card">
+    <a href="embed/html5/spacebar-clicker/index.html">Spacebar Clicker</a>
+</div>
+    
+<div class="game-card">
+    <a href="embed/godot/buckshot-roulette/index.html">BuckShot Roulette</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/godot/triangular-spike/index.html">Triangular Spike</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/doomz-io/index.html">Doomz.io</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/five-nights-at-epsteins/index.html">Five nights at Epsteins</a>
+</div>
+    
 <div class="game-card">
     <a href="admin.html">Admin Portal</a>
 </div>
@@ -113,7 +141,45 @@
     <a href="embed/html5/bloxd-io/index.html">Bloxd.io</a>
 </div>
 
-<!more coming soon!>
+  <div class="game-card">
+    <a href="embed/unity/geometry-dash-breeze/index.html">Geometry Dash: Breeze</a>
+</div>
+
+  <div class="game-card">
+    <a href="embed/unity/geometry-dash-subzero/index.html">Geometry Dash: Subzero</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/gorilla-tag/index.html">Gorilla Tag</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/hollow-knight/index.html">Hollow Knight</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/lobotomy-dash-platformer/index.html">Lobotomy Dash</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/real-flight-simulator/index.html">Real Flight Simulator</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/repo/index.html">Repo</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/rocket-goal/index.html">Rocket Goal</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/saul-goodman-run/index.html">Saul Goodman Run</a>
+</div>
+
+<div class="game-card">
+    <a href="embed/unity/sniper-baby-in-vietnam/index.html">Sniper Baby in Vietnam</a>
+</div>
 
 </div>
 
@@ -223,8 +289,8 @@ function searchGames() {
   for (let i = 0; i < games.length; i++) {
     let title = games[i].textContent.toLowerCase();
 
-    if (title.includes(input)) {
-      games[i].style.display = "";
+    if (input.length > 0 && title.includes(input)) {
+      games[i].style.display = "block";
     } else {
       games[i].style.display = "none";
     }
