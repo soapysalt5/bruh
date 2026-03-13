@@ -165,18 +165,15 @@ gap:8px;
 }
 
 .search-card{
+display:flex;
+align-items:center;
+gap:10px;
+}
 
-padding:12px;
-border-radius:10px;
-
-background:rgba(0,0,0,0.45);
-
-border:1px solid rgba(0,255,255,.3);
-
-backdrop-filter:blur(4px);
-
-transition:.2s;
-
+.search-thumb{
+width:40px;
+height:40px;
+border-radius:8px;
 }
 
 .search-card:hover{
@@ -213,10 +210,16 @@ font-weight:bold;
         
 <script>
 const games = [
-{name:"Bloxd.io", url:"/games/bloxd"},
-{name:"Starblast.io", url:"/games/starblast"},
-{name:"Spacebar Clicker", url:"/games/spacebar"},
-{name:"Undertale", url:"/games/undertale"}
+{
+name:"Bloxd.io",
+url:"/games/bloxd",
+img:"/images/bloxd.png"
+},
+{
+name:"Starblast.io",
+url:"/games/starblast",
+img:"/images/starblast.png"
+}
 ];
 
 function searchGames(){
@@ -234,7 +237,13 @@ if(game.name.toLowerCase().includes(input)){
 
 results.innerHTML += `
 <div class="search-card">
-<a href="${game.url}">${game.name}</a>
+
+<img src="${game.img}" class="search-thumb">
+
+<a href="${game.url}">
+${game.name}
+</a>
+
 </div>
 `;
 
