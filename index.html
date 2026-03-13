@@ -451,6 +451,20 @@ results.innerHTML = `<div class="search-card">No games found</div>`
             }
 
         }
+
+        document.getElementById("gameSearch").addEventListener("keydown", function(e){
+
+if(e.key === "Enter"){
+
+const first = document.querySelector("#searchResults a")
+
+if(first){
+window.location = first.href
+}
+
+}
+
+})
     </script>
 
     <footer>
