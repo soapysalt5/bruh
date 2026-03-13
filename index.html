@@ -211,70 +211,38 @@ font-weight:bold;
         </div>
         <div id="searchResults"></div>
         
-        <script>
-
+<script>
 const games = [
-{
-name: "Starblast.io",
-url: "embed/html5/starblast-io/index.html"
-},
-{
-name: "Deltarune",
-url: "embed/gamemaker/deltarune/index.html"
-},
-{
-name: "Undertale",
-url: "embed/gamemaker/undertale/index.html"
-},
-{
-name: "Bloxd.io",
-url: "embed/html5/bloxd-io/index.html"
-},
-{
-name: "MineKhan",
-url: "embed/html5/minekhan-classic/index.html"
-},
-{
-name: "Spacebar Clicker",
-url: "embed/html5/spacebar-clicker/index.html"
-}
-]
+{name:"Bloxd.io", url:"/games/bloxd"},
+{name:"Starblast.io", url:"/games/starblast"},
+{name:"Spacebar Clicker", url:"/games/spacebar"},
+{name:"Undertale", url:"/games/undertale"}
+];
 
 function searchGames(){
 
-const input = document.getElementById("gameSearch").value.toLowerCase()
-const results = document.getElementById("searchResults")
+const input = document.getElementById("gameSearch").value.toLowerCase();
+const results = document.getElementById("searchResults");
 
-results.innerHTML = ""
+results.innerHTML = "";
 
-if(input.length === 0) return
-
-let found = false
+if(input === "") return;
 
 games.forEach(game => {
 
 if(game.name.toLowerCase().includes(input)){
 
-found = true
-
 results.innerHTML += `
 <div class="search-card">
-<a href="${game.url}">
-${game.name}
-</a>
+<a href="${game.url}">${game.name}</a>
 </div>
-`
+`;
 
 }
 
-})
-
-if(!found){
-results.innerHTML = `<div class="search-card">No games found</div>`
-}
+});
 
 }
-
 </script>
         
         /* <div class="game-card"><a href="embed/html5/starblast-io/index.html">Starblast.io</a></div>
