@@ -155,6 +155,44 @@
         .footer-section a:hover {
             color: white;
         }
+
+#searchResults{
+margin-top:20px;
+width:320px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.search-card{
+
+padding:12px;
+border-radius:10px;
+
+background:rgba(0,0,0,0.45);
+
+border:1px solid rgba(0,255,255,.3);
+
+backdrop-filter:blur(4px);
+
+transition:.2s;
+
+}
+
+.search-card:hover{
+
+background:rgba(0,255,255,.1);
+
+}
+
+.search-card a{
+
+color:#0ff;
+text-decoration:none;
+font-weight:bold;
+
+}
+        
     </style>
 
 </head>
@@ -172,6 +210,68 @@
             <input type="text" id="gameSearch" placeholder="Search Marty Games..." onkeyup="searchGames()">
         </div>
         <div id="searchResults"></div>
+        
+        <script>
+
+const games = [
+{
+name: "Starblast.io",
+url: "embed/html5/starblast-io/index.html"
+},
+{
+name: "Deltarune",
+url: "embed/gamemaker/deltarune/index.html"
+},
+{
+name: "Undertale",
+url: "embed/gamemaker/undertale/index.html"
+},
+{
+name: "Bloxd.io",
+url: "embed/html5/bloxd-io/index.html"
+},
+{
+name: "Spacebar Clicker",
+url: "embed/html5/spacebar-clicker/index.html"
+}
+]
+
+function searchGames(){
+
+const input = document.getElementById("gameSearch").value.toLowerCase()
+const results = document.getElementById("searchResults")
+
+results.innerHTML = ""
+
+if(input.length === 0) return
+
+let found = false
+
+games.forEach(game => {
+
+if(game.name.toLowerCase().includes(input)){
+
+found = true
+
+results.innerHTML += `
+<div class="search-card">
+<a href="${game.url}">
+${game.name}
+</a>
+</div>
+`
+
+}
+
+})
+
+if(!found){
+results.innerHTML = `<div class="search-card">No games found</div>`
+}
+
+}
+
+</script>
         
         /* <div class="game-card"><a href="embed/html5/starblast-io/index.html">Starblast.io</a></div>
         <div class="game-card"><a href="embed/gamemaker/deltarune/index.html">Deltarune</a></div>
