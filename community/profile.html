@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Profile</title>
+<link rel="stylesheet" href="community.css">
+</head>
 
+<body>
+
+<h1>User Profile</h1>
+
+<input id="username" placeholder="GitHub username">
+<button onclick="load()">Load</button>
+
+<div id="profile"></div>
+
+<script>
+
+async function load(){
+
+const user=document.getElementById("username").value;
+
+const res=await fetch(`https://api.github.com/users/${user}`);
+
+const data=await res.json();
+
+document.getElementById("profile").innerHTML=`
+
+<img src="${data.avatar_url}" width="100">
+
+<h2>${data.login}</h2>
+
+<p>${data.bio||""}</p>
+
+<p>Followers: ${data.followers}</p>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
