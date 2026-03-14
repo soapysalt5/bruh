@@ -5,13 +5,8 @@
     <meta charset="UTF-8">
     <title>Marty Games - Your #1 Free Game Hub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Play 1000+ Free Online Games on Marty Games!">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="canonical" href="https://marty-games.github.io/">
 
     <style>
-        /* Canvas background */
-
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -22,17 +17,19 @@
             z-index: -2;
         }
 
-        /* Page */
-
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            min-height: 200vh;
+            font-family: Arial;
             color: white;
+            min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Main center section */
+        main {
+            flex: 1;
+        }
 
         .top-bar {
             display: flex;
@@ -40,133 +37,78 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
+            min-height: 100vh;
             text-align: center;
-            height: 100vh;
         }
 
         h2 {
-            margin: 0;
             font-size: 3em;
-
-            text-shadow:
-                0 0 5px #0ff,
-                0 0 10px #0ff,
-                0 0 20px #0ff,
-                0 0 30px #0ff;
+            text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
         }
 
-        p {
-            margin: 0;
-            font-size: 1.1em;
+        .search-container input {
+            width: 320px;
+            padding: 14px 18px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 255, .4);
+            background: rgba(0, 0, 0, .45);
+            color: white;
+            outline: none;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 8px rgba(0, 255, 255, .3);
         }
 
-        /* Search bar */
+        .search-container input:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 8px #0ff, 0 0 18px #0ff;
+        }
 
-      .search-container{
-position:relative;
-width:350px;
-}
+        #game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 160px);
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
 
-#gameSearch{
+        .game-card {
+            display: none;
+            text-align: center;
+        }
 
-width:100%;
-padding:10px;
+        .game-card img {
+            width: 160px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
-border-radius:8px;
+        .game-card a {
+            color: #0ff;
+            text-decoration: none;
+        }
 
-border:none;
-
-background:#111;
-
-color:white;
-
-}
-
-#searchResults{
-
-position:absolute;
-
-top:45px;
-
-width:100%;
-
-background:#1b1b1b;
-
-border-radius:10px;
-
-overflow:hidden;
-
-box-shadow:0 10px 30px rgba(0,0,0,.5);
-
-}
-
-.search-result{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-padding:10px;
-
-text-decoration:none;
-
-color:white;
-
-}
-
-.search-result:hover{
-
-background:#2a2a2a;
-
-}
-
-.search-thumb{
-
-width:40px;
-height:40px;
-
-border-radius:6px;
-
-}
-
-        /* Transparent footer */
+        .meta {
+            font-size: 12px;
+            color: #aaa;
+        }
 
         footer {
-
-            margin-top: 120vh;
-
-            width: 100%;
-
             padding: 35px 0;
-
             display: flex;
             justify-content: center;
             gap: 80px;
-
-            background: rgba(0, 0, 0, 0.15);
-
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, .15);
             border-top: 1px solid rgba(0, 255, 255, .4);
-
             backdrop-filter: blur(3px);
-
-            box-shadow:
-                0 -2px 20px rgba(0, 255, 255, .2);
-
         }
-
-        /* Footer sections */
 
         .footer-section {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-section h3,
-        .footer-section h4 {
-            margin: 0;
+            gap: 6px;
         }
 
         .footer-section a {
@@ -177,222 +119,147 @@ border-radius:6px;
         .footer-section a:hover {
             color: white;
         }
-
-#searchResults{
-margin-top:20px;
-width:320px;
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.search-card{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.search-thumb{
-width:40px;
-height:40px;
-border-radius:8px;
-}
-
-.search-card:hover{
-
-background:rgba(0,255,255,.1);
-
-}
-
-.search-card a{
-
-color:#0ff;
-text-decoration:none;
-font-weight:bold;
-
-}
-        
     </style>
-
 </head>
 
 <body>
 
     <canvas id="bg-canvas"></canvas>
 
-    <div class="top-bar">
+    <main>
+        <div class="top-bar">
 
-        <h2>Marty Games</h2>
-        <p>Coming soon.</p>
+            <h2>Marty Games</h2>
+            <p>Coming soon.</p>
 
-<div class="search-container">
+            <div class="search-container">
+                <input id="gameSearch" type="text" placeholder="Search Marty Games..." onkeyup="searchGames()">
+            </div>
 
-<input
-id="gameSearch"
-placeholder="Search 1000+ games..."
-autocomplete="off"
-/>
+            <div id="game-list"></div>
 
-<div id="searchResults"></div>
+        </div>
+    </main>
 
-</div>
-        
     <script>
-        /* Particle background */
+        let gamesData = []
 
-        const canvas = document.getElementById('bg-canvas')
-        const ctx = canvas.getContext('2d')
+        fetch("games.json")
+            .then(res => res.json())
+            .then(data => {
+                gamesData = data
+                const container = document.getElementById("game-list")
 
-        let particlesArray = []
+                data.forEach(game => {
+                    const card = document.createElement("div")
+                    card.className = "game-card"
 
-        const MAX_PARTICLES = 50
-        const MAX_DISTANCE = 100
-        const COLORS = ['#0ff', '#ff0', '#f0f', '#0f0', '#f0ff']
-
-        function init() {
-
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
-
-            particlesArray = []
-
-            for (let i = 0; i < MAX_PARTICLES; i++) {
-                particlesArray.push(new Particle())
-            }
-
-        }
-
-        class Particle {
-
-            constructor() {
-
-                this.x = Math.random() * canvas.width
-                this.y = Math.random() * canvas.height
-                this.size = Math.random() * 3 + 1
-
-                this.speedX = (Math.random() - .5) * 1.2
-                this.speedY = (Math.random() - .5) * 1.2
-
-                this.color = COLORS[Math.floor(Math.random() * COLORS.length)]
-
-            }
-
-            update() {
-
-                this.x += this.speedX
-                this.y += this.speedY
-
-                if (this.x > canvas.width) this.x = 0
-                if (this.x < 0) this.x = canvas.width
-                if (this.y > canvas.height) this.y = 0
-                if (this.y < 0) this.y = canvas.height
-
-            }
-
-            draw() {
-
-                ctx.beginPath()
-
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-
-                ctx.shadowColor = this.color
-                ctx.shadowBlur = 8
-
-                ctx.fillStyle = this.color
-
-                ctx.fill()
-
-            }
-
-        }
-
-        function connect() {
-
-            for (let a = 0; a < particlesArray.length; a++) {
-
-                for (let b = a + 1; b < particlesArray.length; b++) {
-
-                    const dx = particlesArray[a].x - particlesArray[b].x
-                    const dy = particlesArray[a].y - particlesArray[b].y
-
-                    const distance = Math.sqrt(dx * dx + dy * dy)
-
-                    if (distance < MAX_DISTANCE) {
-
-                        ctx.beginPath()
-
-                        ctx.strokeStyle = `rgba(0,255,255,${0.5-distance/(2*MAX_DISTANCE)})`
-
-                        ctx.lineWidth = 1.2
-
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y)
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y)
-
-                        ctx.stroke()
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        function animate() {
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-            particlesArray.forEach(p => {
-                p.update()
-                p.draw()
+                    card.innerHTML = `
+<a href="${game.url}">
+<img src="${game.thumbnail}">
+<br>
+<strong>${game.name}</strong>
+</a>
+<div class="meta">
+ID: ${game.id}<br>
+Author: ${game.author}<br>
+Engine: ${game.engine}
+</div>
+`
+                    container.appendChild(card)
+                })
             })
 
-            connect()
-
-            requestAnimationFrame(animate)
-
-        }
-
-        window.addEventListener('resize', init)
-
-        init()
-        animate()
-    </script>
-
-    <script>
         function searchGames() {
-
             let input = document.getElementById("gameSearch").value.toLowerCase()
-
             let games = document.getElementsByClassName("game-card")
 
             for (let i = 0; i < games.length; i++) {
-
                 let title = games[i].textContent.toLowerCase()
-
                 if (input.length > 0 && title.includes(input)) {
                     games[i].style.display = "block"
                 } else {
                     games[i].style.display = "none"
                 }
-
             }
+        }
+    </script>
 
+    <script>
+        const canvas = document.getElementById("bg-canvas")
+        const ctx = canvas.getContext("2d")
+
+        let particles = []
+        const MAX = 50
+        const DIST = 100
+        const COLORS = ['#0ff', '#ff0', '#f0f', '#0f0'] /* red removed */
+
+        function init() {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+            particles = []
+            for (let i = 0; i < MAX; i++) particles.push(new Particle())
         }
 
-        document.getElementById("gameSearch").addEventListener("keydown", function(e){
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width
+                this.y = Math.random() * canvas.height
+                this.size = Math.random() * 3 + 1
+                this.vx = (Math.random() - .5) * 1.2
+                this.vy = (Math.random() - .5) * 1.2
+                this.color = COLORS[Math.floor(Math.random() * COLORS.length)]
+            }
 
-if(e.key === "Enter"){
+            update() {
+                this.x += this.vx
+                this.y += this.vy
+                if (this.x > canvas.width) this.x = 0
+                if (this.x < 0) this.x = canvas.width
+                if (this.y > canvas.height) this.y = 0
+                if (this.y < 0) this.y = canvas.height
+            }
 
-const first = document.querySelector("#searchResults a")
+            draw() {
+                ctx.beginPath()
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+                ctx.shadowColor = this.color
+                ctx.shadowBlur = 8
+                ctx.fillStyle = this.color
+                ctx.fill()
+            }
+        }
 
-if(first){
-window.location = first.href
-}
+        function connect() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a + 1; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x
+                    let dy = particles[a].y - particles[b].y
+                    let d = Math.sqrt(dx * dx + dy * dy)
+                    if (d < DIST) {
+                        ctx.beginPath()
+                        ctx.strokeStyle = `rgba(0,255,255,${0.5-d/(2*DIST)})`
+                        ctx.moveTo(particles[a].x, particles[a].y)
+                        ctx.lineTo(particles[b].x, particles[b].y)
+                        ctx.stroke()
+                    }
+                }
+            }
+        }
 
-}
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            particles.forEach(p => {
+                p.update();
+                p.draw()
+            })
+            connect()
+            requestAnimationFrame(animate)
+        }
 
-})
+        window.addEventListener("resize", init)
+        init()
+        animate()
     </script>
 
     <footer>
@@ -404,74 +271,19 @@ window.location = first.href
 
         <div class="footer-section">
             <h4>Site</h4>
-            <a href="/about-us/index.html">About Us (Coming Soon)</a>
-            <a href="/contact-us/index.html">Contact Us (Coming Soon)</a>
-            <a href="/credits/index.html">Credits (Coming Soon)</a>
-            <a href="/dmca/index.html">DMCA (Coming Soon)</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Credits</a>
+            <a href="#">DMCA</a>
         </div>
 
         <div class="footer-section">
             <h4>Community</h4>
-            <a href="/community-chat.html">Community Chat (Coming Soon)</a>
+            <a href="#">Community Chat</a>
         </div>
 
     </footer>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
-<script>
-
-let games = []
-let fuse
-
-fetch("/games.json")
-.then(r => r.json())
-.then(data => {
-
-games = data
-
-// initialize Fuse AFTER data loads
-fuse = new Fuse(games,{
-keys:["name","tags"],
-threshold:0.35
-})
-
-})
-
-function searchGames(){
-
-const input = document.getElementById("gameSearch").value
-
-const resultsBox = document.getElementById("searchResults")
-
-resultsBox.innerHTML=""
-
-if(!fuse) return
-
-const results = fuse.search(input)
-
-results.slice(0,8).forEach(result => {
-
-const game = result.item
-
-resultsBox.innerHTML += `
-<a href="${game.url}" class="search-result">
-
-<img src="${game.img}" class="search-thumb">
-
-<span>${game.name}</span>
-
-</a>
-`
-
-})
-
-}
-
-document.getElementById("gameSearch")
-.addEventListener("input",searchGames)
-
-</script>
-    
 </body>
 
 </html>
