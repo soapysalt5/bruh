@@ -75,9 +75,7 @@ Please follow the repository structure when adding new content.
 
 ## Tips for Contributors
 
-- Add new games inside the ```/embed/``` folder
-
-- Update the Featured Games table in this ```README.md``` if adding a new game
+- Add new games inside the ```games.json``` file
 
 ---
 
