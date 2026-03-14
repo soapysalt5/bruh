@@ -1,1 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Community Feed</title>
+<link rel="stylesheet" href="community.css">
+</head>
 
+<body>
+
+<h1>📰 Community Feed</h1>
+
+<div id="posts"></div>
+
+<script src="api.js"></script>
+
+<script>
+
+async function loadPosts(){
+
+const posts = await getPosts();
+
+const container = document.getElementById("posts");
+container.innerHTML="";
+
+posts.forEach(p=>{
+
+const div=document.createElement("div");
+div.className="post";
+
+div.innerHTML=`
+<h3>${p.title}</h3>
+<p>${p.body}</p>
+<p>by ${p.user.login}</p>
+<a href="${p.html_url}" target="_blank">Reply</a>
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+loadPosts();
+
+</script>
+
+</body>
+</html>
