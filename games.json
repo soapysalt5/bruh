@@ -138,7 +138,7 @@
     {
         "id": 18,
         "name": "Marty Games Chat*",
-        "author": "Unknown",
+        "author": "Martin_MMC",
         "engine": "WebApp",
         "url": "embed/apps/padlet-chat/index.html",
         "thumbnail": "thumbnails/chat.jpg"
@@ -270,5 +270,15 @@
         "engine": "GameMaker",
         "url": "embed/gamemaker/undertale/index.html",
         "thumbnail": "thumbnails/undertale.jpg"
+    },
+
+      {
+        "id": 35,
+        "name": "Crazygames",
+        "author": "Raf Mertens and Tomas Mertens",
+        "engine": "HTML5",
+        "url": "embed/html5/crazygames/index.html",
+        "thumbnail": "https://www.crazygames.com/images/logo/logo-ziggy.svg"
     }
+    
 ]
