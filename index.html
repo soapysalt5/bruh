@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Marty Games - Your #1 Free Game Hub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         a {
             text-decoration: none;
@@ -83,7 +84,6 @@
         }
 
         .game-card {
-            display: none;
             background: rgba(0, 0, 0, 0.6);
             border-radius: 16px;
             overflow: hidden;
@@ -111,13 +111,6 @@
             font-size: 1.1em;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
             text-shadow: 0 0 6px #0ff;
-        }
-
-        .meta {
-            font-size: 12px;
-            color: #aaa;
-            padding-bottom: 12px;
-            text-align: center;
         }
 
         footer {
@@ -148,16 +141,20 @@
 </head>
 
 <body>
+
     <canvas id="bg-canvas"></canvas>
 
     <main>
         <div class="top-bar">
+
             <h2>Marty Games</h2>
+
             <div class="search-container">
-                <input id="gameSearch" type="text" placeholder="Search Marty Games..." onkeyup="searchGames()">
+                <input id="gameSearch" type="text" placeholder="Search Marty Games...">
             </div>
 
             <div id="game-list"></div>
+
         </div>
     </main>
 
@@ -167,39 +164,50 @@
         fetch("games.json")
             .then(res => res.json())
             .then(data => {
+
+                // SORT ALPHABETICALLY
+                data.sort((a, b) => a.name.localeCompare(b.name));
+
                 gamesData = data;
-                const container = document.getElementById("game-list");
 
-                data.forEach(game => {
-                    const card = document.createElement("div");
-                    card.className = "game-card";
-
-                    card.innerHTML = `
-        <a href="${game.url}">
-            <img src="${game.thumbnail}">
-            <div class="game-title">${game.name}</div>
-        </a>
-        <div class="meta">
-            ID: ${game.id}<br>
-            Author: ${game.author}<br>
-            Engine: ${game.engine}
-        </div>
-        `;
-
-                    container.appendChild(card);
-                });
+                renderGames(gamesData);
             });
 
-        function searchGames() {
-            let input = document.getElementById("gameSearch").value.toLowerCase();
-            let games = document.getElementsByClassName("game-card");
+        function renderGames(games) {
 
-            for (let i = 0; i < games.length; i++) {
-                let title = games[i].textContent.toLowerCase();
-                games[i].style.display =
-                    (input.length > 0 && title.includes(input)) ? "block" : "none";
-            }
+            const container = document.getElementById("game-list");
+
+            container.innerHTML = "";
+
+            games.forEach(game => {
+
+                const card = document.createElement("div");
+                card.className = "game-card";
+
+                card.innerHTML = `
+        <a href="${game.url}">
+        <img src="${game.thumbnail}">
+        <div class="game-title">${game.name}</div>
+        </a>
+        `;
+
+                container.appendChild(card);
+
+            });
+
         }
+
+        document.getElementById("gameSearch").addEventListener("input", function() {
+
+            const search = this.value.toLowerCase();
+
+            const filtered = gamesData.filter(game =>
+                game.name.toLowerCase().includes(search)
+            );
+
+            renderGames(filtered);
+
+        });
     </script>
 
     <script>
@@ -212,24 +220,31 @@
         const COLORS = ['#0ff', '#ff0', '#f0f', '#0f0'];
 
         function init() {
+
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
             particles = [];
+
             for (let i = 0; i < MAX; i++) particles.push(new Particle());
+
         }
 
         class Particle {
+
             constructor() {
+
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 3 + 1;
                 this.vx = (Math.random() - .5) * 1.2;
                 this.vy = (Math.random() - .5) * 1.2;
                 this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
             }
 
             update() {
+
                 this.x += this.vx;
                 this.y += this.vy;
 
@@ -237,20 +252,26 @@
                 if (this.x < 0) this.x = canvas.width;
                 if (this.y > canvas.height) this.y = 0;
                 if (this.y < 0) this.y = canvas.height;
+
             }
 
             draw() {
+
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.shadowColor = this.color;
                 ctx.shadowBlur = 8;
                 ctx.fillStyle = this.color;
                 ctx.fill();
+
             }
+
         }
 
         function connect() {
+
             for (let a = 0; a < particles.length; a++) {
+
                 for (let b = a + 1; b < particles.length; b++) {
 
                     let dx = particles[a].x - particles[b].x;
@@ -258,17 +279,23 @@
                     let d = Math.sqrt(dx * dx + dy * dy);
 
                     if (d < DIST) {
+
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(0,255,255,${0.5-d/(2*DIST)})`;
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
                         ctx.stroke();
+
                     }
+
                 }
+
             }
+
         }
 
         function animate() {
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach(p => {
@@ -279,6 +306,7 @@
             connect();
 
             requestAnimationFrame(animate);
+
         }
 
         window.addEventListener("resize", init);
