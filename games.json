@@ -257,6 +257,14 @@
     },
     {
         "id": 33,
+        "name": "Grand Theft Auto: Vice City",
+        "author": "Rockstar Games",
+        "engine": "HTML5",
+        "url": "embed/html5/grand-theft-auto-vice-city/index.html",
+        "thumbnail": "https://raw.githubusercontent.com/MartinMMCyt/gta/refs/heads/main/images/gta-vice-city.png"
+    },
+    {
+        "id": 34,
         "name": "Undertale",
         "author": "Toby Fox",
         "engine": "GameMaker",
