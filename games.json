@@ -29,7 +29,7 @@
         "author": "Mike Klubnika",
         "engine": "Godot",
         "url": "embed/godot/buckshot-roulette/index.html",
-        "thumbnail": "thumbnails/buckshot-roulette.jpg"
+        "thumbnail": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/205.png"
     },
     {
         "id": 5,
@@ -177,11 +177,11 @@
     },
     {
         "id": 23,
-        "name": "Repo",
+        "name": "R. E. P. O.",
         "author": "Unknown",
         "engine": "Unity",
         "url": "embed/unity/repo/index.html",
-        "thumbnail": "thumbnails/repo.jpg"
+        "thumbnail": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/195.png"
     },
     {
         "id": 24,
