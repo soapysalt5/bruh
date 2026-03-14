@@ -27,10 +27,10 @@ Welcome to **Marty Games**, the ultimate browser-based gaming destination! Play 
 
 | Game | Category | Description |
 |------|---------|-------------|
-| Starblast.io | Multiplayer, Space | Blast enemy spaceships in a fast-paced shooter. |
-| Bloxd.io | Sandbox, Multiplayer | Play free online games in this voxel world! |
-| CrazyGames | Gaming | Free online games on CrazyGames! |
-| Evowars.io (coming soon) | Multiplayer, Battle | Challenge players in an online arena. |
+| R. E. P. O. | Horror | Locate valuable, fully physics-based objects and handle them with care as you retrieve and extract. Don't let the monsters get you... |
+| Gorilla Tag | Multiplayer | Run from the other gorillas, or outmaneuver the survivors to catch them. Parkour up trees and cliff faces to evade and chase monke down. |
+| Minecraft | Sandbox | Survive in an infinite sandbox world. The world is yours for the making. |
+| Buckshot Roulette | Russian Roulette | Join the game with a 12-gauge shotgun, turning Russian Roulette into a high-stakes gamble for survival. |
 
 ---
 
