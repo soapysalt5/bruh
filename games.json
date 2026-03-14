@@ -13,7 +13,7 @@
         "author": "Aptoide",
         "engine": "WebApp",
         "url": "embed/apps/aptoide/index.html",
-        "thumbnail": "thumbnails/aptoide.jpg"
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/9/95/Aptoide_icon.png"
     },
     {
         "id": 3,
@@ -21,7 +21,7 @@
         "author": "Arthur",
         "engine": "HTML5",
         "url": "embed/html5/bloxd-io/index.html",
-        "thumbnail": "thumbnails/bloxd-io.jpg"
+        "thumbnail": "https://play-lh.googleusercontent.com/sv8XG2T7qWI6yuxJSYgtOq1coV5pTXs474IS_W6GqJ5Rn0nF5w6NV7-kvlMThKb5nXk8=w240-h480-rw"
     },
     {
         "id": 4,
