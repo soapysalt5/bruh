@@ -46,9 +46,9 @@ marty-games.github.io(root)/
 ├─ embed/               # Game and app files live here
 ├─ community/           # Future community chat and more
 ├─ favicon.ico          # Website icon
-└─ README.md            # This file
+└─ /.github/README.md   # This file
 ```
-
+Note: this only shows the more important files in the repository.
 ---
 
 # Built With
