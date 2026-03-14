@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Community Chat</title>
+<link rel="stylesheet" href="community.css">
+</head>
 
+<body>
+
+<h1>💬 Global Chat</h1>
+
+<div id="chat"></div>
+
+<input id="msg" placeholder="Message">
+<button onclick="send()">Send</button>
+
+<script src="api.js"></script>
+
+<script>
+
+const CHAT_ISSUE = 1;
+
+async function load(){
+
+const comments = await getComments(CHAT_ISSUE);
+
+const chat = document.getElementById("chat");
+chat.innerHTML="";
+
+comments.forEach(c=>{
+
+const div=document.createElement("div");
+div.className="msg";
+
+div.innerHTML=`
+<img src="${c.user.avatar_url}" width="24">
+<b>${c.user.login}</b>: ${c.body}
+`;
+
+chat.appendChild(div);
+
+});
+
+}
+
+function send(){
+
+window.open(
+"https://github.com/Drag00nKnight999/Marty-Games-Chat/issues/1#issuecomment-new"
+);
+
+}
+
+load();
+setInterval(load,10000);
+
+</script>
+
+</body>
+</html>
