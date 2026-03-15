@@ -3,431 +3,477 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<title>Marty Games</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Marty Games</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <style>
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-a{ text-decoration:none; color:inherit; }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: -2;
+        }
 
-#bg-canvas{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-z-index:-2;
-}
+        body {
+            margin: 0;
+            font-family: Arial;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            background: black;
+        }
 
-body{
-margin:0;
-font-family:Arial;
-color:white;
-min-height:100vh;
-overflow-x:hidden;
-display:flex;
-flex-direction:column;
-background:black;
-}
+        main {
+            flex: 1;
+            padding-top: 120px;
+        }
 
-main{
-flex:1;
-padding-top:120px;
-}
+        /* NAVBAR */
 
-/* NAVBAR */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, .7);
+            border-bottom: 1px solid rgba(0, 255, 255, .4);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+        }
 
-.top-nav{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:12px 20px;
-background:rgba(0,0,0,.7);
-border-bottom:1px solid rgba(0,255,255,.4);
-backdrop-filter:blur(6px);
-z-index:100;
-}
+        .nav-left {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 0 0 6px #0ff;
+        }
 
-.nav-left{
-font-weight:bold;
-font-size:1.2em;
-text-shadow:0 0 6px #0ff;
-}
+        .nav-center {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-.nav-center{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
+        .site-title {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow:
+                0 0 5px #0ff,
+                0 0 10px #0ff,
+                0 0 20px #0ff;
+        }
 
-.site-title{
-font-size:3em;
-text-align:center;
-margin-bottom:30px;
-text-shadow:
-0 0 5px #0ff,
-0 0 10px #0ff,
-0 0 20px #0ff;
-}
+        /* CONTROLS */
 
-/* CONTROLS */
+        input,
+        select {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 255, 255, .4);
+            background: rgba(0, 0, 0, .45);
+            color: white;
+            outline: none;
+        }
 
-input,select{
-padding:10px 12px;
-border-radius:10px;
-border:2px solid rgba(0,255,255,.4);
-background:rgba(0,0,0,.45);
-color:white;
-outline:none;
-}
+        input:focus,
+        select:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 10px #0ff;
+        }
 
-input:focus,select:focus{
-border-color:#0ff;
-box-shadow:0 0 10px #0ff;
-}
+        /* EMBED VIEWER */
 
-/* EMBED VIEWER */
+        #embedViewer {
+            display: none;
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            margin-bottom: 40px;
+            border: 2px solid rgba(0, 255, 255, .3);
+            border-radius: 12px;
+            overflow: hidden;
+        }
 
-#embedViewer{
-display:none;
-width:90%;
-max-width:1100px;
-margin:auto;
-margin-bottom:40px;
-border:2px solid rgba(0,255,255,.3);
-border-radius:12px;
-overflow:hidden;
-}
+        #embedHeader {
+            background: black;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(0, 255, 255, .3);
+            align-items: center;
+        }
 
-#embedHeader{
-background:black;
-padding:10px;
-display:flex;
-gap:10px;
-border-bottom:1px solid rgba(0,255,255,.3);
-align-items:center;
-}
+        #embedFrame {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            background: black;
+        }
 
-#embedFrame{
-width:100%;
-height:80vh;
-border:none;
-background:black;
-}
+        /* GAME GRID */
 
-/* GAME GRID */
+        #game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            margin-bottom: 60px;
+        }
 
-#game-list{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:25px;
-width:90%;
-max-width:1100px;
-margin:auto;
-margin-bottom:60px;
-}
+        .game-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .3s ease, box-shadow .3s ease;
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+            border: 2px solid rgba(0, 255, 255, 0.25);
+        }
 
-.game-card{
-background:rgba(0,0,0,0.6);
-border-radius:16px;
-overflow:hidden;
-cursor:pointer;
-transition:transform .3s ease, box-shadow .3s ease;
-box-shadow:0 0 12px rgba(0,255,255,0.3);
-border:2px solid rgba(0,255,255,0.25);
-}
+        .game-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+        }
 
-.game-card:hover{
-transform:scale(1.08);
-box-shadow:0 0 15px #0ff,0 0 30px #0ff;
-}
+        .game-card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
 
-.game-card img{
-width:100%;
-aspect-ratio:1/1;
-object-fit:cover;
-}
+        .game-title {
+            padding: 12px;
+            text-align: center;
+            font-size: 1.1em;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+            text-shadow: 0 0 6px #0ff;
+        }
 
-.game-title{
-padding:12px;
-text-align:center;
-font-size:1.1em;
-background:linear-gradient(to top,rgba(0,0,0,0.9),rgba(0,0,0,0.6));
-text-shadow:0 0 6px #0ff;
-}
+        /* FOOTER */
 
-/* FOOTER */
-
-footer{
-padding:35px 0;
-display:flex;
-justify-content:center;
-background:rgba(0,0,0,.15);
-border-top:1px solid rgba(0,255,255,.4);
-backdrop-filter:blur(3px);
-}
-
-</style>
+        footer {
+            padding: 35px 0;
+            display: flex;
+            justify-content: center;
+            background: rgba(0, 0, 0, .15);
+            border-top: 1px solid rgba(0, 255, 255, .4);
+            backdrop-filter: blur(3px);
+        }
+    </style>
 
 </head>
 
 <body>
 
-<canvas id="bg-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
-<div class="top-nav">
+    <div class="top-nav">
 
-<div class="nav-left">Marty Games</div>
+        <div class="nav-left">Marty Games</div>
 
-<div class="nav-center">
+        <div class="nav-center">
 
-<input id="gameSearch" placeholder="Search games">
+            <input id="gameSearch" placeholder="Search games">
 
-<select id="categoryFilter">
-<option value="all">All Categories</option>
-<option value="action">Action</option>
-<option value="driving">Driving</option>
-<option value="skill">Skill</option>
-<option value="shooter">Shooter</option>
-<option value="puzzle">Puzzle</option>
-</select>
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="action">Action</option>
+                <option value="driving">Driving</option>
+                <option value="skill">Skill</option>
+                <option value="shooter">Shooter</option>
+                <option value="puzzle">Puzzle</option>
+            </select>
 
-<select id="sortSelect">
-<option value="name">Sort by Name</option>
-<option value="id">Sort by ID</option>
-</select>
+            <select id="sortSelect">
+                <option value="name">Sort by Name</option>
+                <option value="id">Sort by ID</option>
+            </select>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<main>
+    <main>
 
-<h1 class="site-title">Marty Games</h1>
+        <h1 class="site-title">Marty Games</h1>
 
-<div id="embedViewer">
+        <div id="embedViewer">
 
-<div id="embedHeader">
+            <div id="embedHeader">
 
-<button onclick="closeEmbed()">Close</button> <button onclick="openNewTab()">New Tab</button>
+                <button onclick="closeEmbed()">Close</button> <button onclick="openNewTab()">New Tab</button>
 
-<span id="embedTitle"></span>
+                <span id="embedTitle"></span>
 
-</div>
+            </div>
 
-<iframe id="embedFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            <iframe id="embedFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
 
-</div>
+        </div>
 
-<div id="game-list"></div>
+        <div id="game-list"></div>
 
-</main>
+    </main>
 
-<footer>
-<h4>© 2026 Marty Games</h4>
-</footer>
+    <footer>
+        <h4>© 2026 Marty Games</h4>
+    </footer>
 
-<script>
+    <script>
+        let gamesData = [];
+        let currentGameHTML = "";
+        let currentGameURL = "";
 
-let gamesData=[];
-let currentGameHTML="";
-let currentGameURL="";
+        fetch("games.json")
+            .then(r => r.json())
+            .then(data => {
+                gamesData = data;
+                sortGames();
+                filterGames();
+            });
 
-fetch("games.json")
-.then(r=>r.json())
-.then(data=>{
-gamesData=data;
-sortGames();
-filterGames();
-});
+        function renderGames(games) {
 
-function renderGames(games){
+            const container = document.getElementById("game-list");
+            container.innerHTML = "";
 
-const container=document.getElementById("game-list");
-container.innerHTML="";
+            if (!games.length) {
+                container.innerHTML = "<p>No games found</p>";
+                return;
+            }
 
-if(!games.length){
-container.innerHTML="<p>No games found</p>";
-return;
-}
+            games.forEach(game => {
 
-games.forEach(game=>{
+                const card = document.createElement("div");
+                card.className = "game-card";
 
-const card=document.createElement("div");
-card.className="game-card";
-
-card.innerHTML=`
+                card.innerHTML = `
 <img src="${game.thumbnail}" loading="lazy">
 <div class="game-title">${game.name}</div>
 `;
 
-card.onclick=()=>openGame(game);
+                card.onclick = () => openGame(game);
 
-container.appendChild(card);
+                container.appendChild(card);
 
-});
+            });
 
-}
+        }
 
-function filterGames(){
+        function filterGames() {
 
-const search=document.getElementById("gameSearch").value.toLowerCase();
-const category=document.getElementById("categoryFilter").value;
+            const search = document.getElementById("gameSearch").value.toLowerCase();
+            const category = document.getElementById("categoryFilter").value;
 
-let filtered=gamesData.filter(game=>{
+            let filtered = gamesData.filter(game => {
 
-const nameMatch=game.name.toLowerCase().includes(search);
-const categoryMatch=category==="all" || game.category===category;
+                const nameMatch = game.name.toLowerCase().includes(search);
+                const categoryMatch = category === "all" || game.category === category;
 
-return nameMatch && categoryMatch;
+                return nameMatch && categoryMatch;
 
-});
+            });
 
-renderGames(filtered);
+            renderGames(filtered);
 
-}
+        }
 
-function sortGames(){
+        function sortGames() {
 
-const type=document.getElementById("sortSelect").value;
+            const type = document.getElementById("sortSelect").value;
 
-if(type==="name") gamesData.sort((a,b)=>a.name.localeCompare(b.name));
-if(type==="id") gamesData.sort((a,b)=>a.id-b.id);
+            if (type === "name") gamesData.sort((a, b) => a.name.localeCompare(b.name));
+            if (type === "id") gamesData.sort((a, b) => a.id - b.id);
 
-filterGames();
+            filterGames();
 
-}
+        }
 
-async function loadGameHTML(url){
+        async function loadGameHTML(url) {
 
-const res=await fetch(url);
-let html=await res.text();
+            const res = await fetch(url);
+            let html = await res.text();
 
-const base=url.substring(0,url.lastIndexOf("/")+1);
+            const base = url.substring(0, url.lastIndexOf("/") + 1);
 
-/* rewrite asset paths */
+            /* rewrite asset paths */
 
-html=html.replace(/(src|href)=["'](?!https?:\/\/|\/)/g,`$1="${base}`);
-html=html.replace(/url\((?!https?:\/\/|\/)/g,`url(${base}`);
+            html = html.replace(/(src|href)=["'](?!https?:\/\/|\/)/g, `$1="${base}`);
+            html = html.replace(/url\((?!https?:\/\/|\/)/g, `url(${base}`);
 
-return html;
+            return html;
 
-}
+        }
 
-async function openGame(game){
+        async function openGame(game) {
 
-const html=await loadGameHTML(game.url);
+            const html = await loadGameHTML(game.url);
 
-currentGameHTML=html;
-currentGameURL=game.url;
+            currentGameHTML = html;
+            currentGameURL = game.url;
 
-document.getElementById("embedViewer").style.display="block";
-document.getElementById("embedTitle").textContent=game.name;
+            document.getElementById("embedViewer").style.display = "block";
+            document.getElementById("embedTitle").textContent = game.name;
 
-const frame=document.getElementById("embedFrame");
+            const frame = document.getElementById("embedFrame");
 
-frame.srcdoc=html;
+            frame.srcdoc = html;
 
-window.scrollTo({
-top:document.getElementById("embedViewer").offsetTop-100,
-behavior:"smooth"
-});
+            window.scrollTo({
+                top: document.getElementById("embedViewer").offsetTop - 100,
+                behavior: "smooth"
+            });
 
-}
+        }
 
-function closeEmbed(){
+        function closeEmbed() {
 
-document.getElementById("embedViewer").style.display="none";
-document.getElementById("embedFrame").srcdoc="";
+            document.getElementById("embedViewer").style.display = "none";
+            document.getElementById("embedFrame").srcdoc = "";
 
-}
+        }
 
-function openNewTab(){
+        function openNewTab() {
 
-if(!currentGameHTML) return;
+            if (!currentGameHTML) return;
 
-const newTab=window.open("about:blank");
+            const newTab = window.open("about:blank");
 
-newTab.document.open();
-newTab.document.write(currentGameHTML);
-newTab.document.close();
+            newTab.document.open();
+            newTab.document.write(currentGameHTML);
+            newTab.document.close();
 
-}
+        }
 
-document.getElementById("gameSearch").addEventListener("input",filterGames);
-document.getElementById("categoryFilter").addEventListener("change",filterGames);
-document.getElementById("sortSelect").addEventListener("change",sortGames);
+        document.getElementById("gameSearch").addEventListener("input", filterGames);
+        document.getElementById("categoryFilter").addEventListener("change", filterGames);
+        document.getElementById("sortSelect").addEventListener("change", sortGames);
+    </script>
 
-</script>
+    <script>
+        const canvas = document.getElementById("bg-canvas"),
+            ctx = canvas.getContext("2d");
 
-<script>
+        let particles = [];
+        const MAX = window.innerWidth < 600 ? 25 : 50;
+        const DIST = 100;
+        const COLORS = ['#0ff', '#ff0', '#f0f', '#0f0'];
 
-/* PARTICLE BACKGROUND (unchanged) */
+        function init() {
 
-const canvas=document.getElementById("bg-canvas"),
-ctx=canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-let particles=[];
-const MAX=window.innerWidth<600?25:50;
-const COLORS=['#0ff','#ff0','#f0f','#0f0'];
+            particles = [];
 
-function init(){
+            for (let i = 0; i < MAX; i++) particles.push(new Particle());
 
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+        }
 
-particles=[];
+        class Particle {
 
-for(let i=0;i<MAX;i++){
+            constructor() {
 
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-.5)*1.2,
-vy:(Math.random()-.5)*1.2,
-size:Math.random()*3+1,
-color:COLORS[Math.floor(Math.random()*COLORS.length)]
-})
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.vx = (Math.random() - .5) * 1.2;
+                this.vy = (Math.random() - .5) * 1.2;
+                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
 
-}
+            }
 
-}
+            update() {
 
-function animate(){
+                this.x += this.vx;
+                this.y += this.vy;
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
 
-particles.forEach(p=>{
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
 
-p.x+=p.vx;
-p.y+=p.vy;
+            }
 
-if(p.x<0||p.x>canvas.width)p.vx*=-1;
-if(p.y<0||p.y>canvas.height)p.vy*=-1;
+            draw() {
 
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-ctx.fillStyle=p.color;
-ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 8;
+                ctx.fillStyle = this.color;
+                ctx.fill();
 
-})
+            }
 
-requestAnimationFrame(animate);
+        }
 
-}
+        function connect() {
 
-window.addEventListener("resize",init);
+            for (let a = 0; a < particles.length; a++) {
 
-init();
-animate();
+                for (let b = a + 1; b < particles.length; b++) {
 
-</script>
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let d = Math.sqrt(dx * dx + dy * dy);
+
+                    if (d < DIST) {
+
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0,255,255,${0.5-d/(2*DIST)})`;
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        function animate() {
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            connect();
+
+            requestAnimationFrame(animate);
+
+        }
+
+        window.addEventListener("resize", init);
+
+        init();
+        animate();
+    </script>
+
 
 </body>
+
 </html>
