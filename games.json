@@ -270,15 +270,6 @@
         "engine": "GameMaker",
         "url": "embed/gamemaker/undertale/index.html",
         "thumbnail": "thumbnails/undertale.jpg"
-    },
-
-      {
-        "id": 35,
-        "name": "Crazygames",
-        "author": "Raf Mertens and Tomas Mertens",
-        "engine": "HTML5",
-        "url": "embed/html5/crazygames/index.html",
-        "thumbnail": "https://www.crazygames.com/images/logo/logo-ziggy.svg"
     }
     
 ]
