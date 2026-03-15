@@ -39,7 +39,7 @@
             padding-top: 120px;
         }
 
-        /* NAVBAR */
+        /* NAV */
 
         .top-nav {
             position: fixed;
@@ -78,8 +78,6 @@
                 0 0 20px #0ff;
         }
 
-        /* CONTROLS */
-
         input,
         select {
             padding: 10px 12px;
@@ -87,45 +85,9 @@
             border: 2px solid rgba(0, 255, 255, .4);
             background: rgba(0, 0, 0, .45);
             color: white;
-            outline: none;
         }
 
-        input:focus,
-        select:focus {
-            border-color: #0ff;
-            box-shadow: 0 0 10px #0ff;
-        }
-
-        /* EMBED VIEWER */
-
-        #embedViewer {
-            display: none;
-            width: 90%;
-            max-width: 1100px;
-            margin: auto;
-            margin-bottom: 40px;
-            border: 2px solid rgba(0, 255, 255, .3);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        #embedHeader {
-            background: black;
-            padding: 10px;
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid rgba(0, 255, 255, .3);
-            align-items: center;
-        }
-
-        #embedFrame {
-            width: 100%;
-            height: 80vh;
-            border: none;
-            background: black;
-        }
-
-        /* GAME GRID */
+        /* GRID */
 
         #game-list {
             display: grid;
@@ -142,7 +104,7 @@
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform .3s ease, box-shadow .3s ease;
+            transition: .3s;
             box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
             border: 2px solid rgba(0, 255, 255, 0.25);
         }
@@ -162,8 +124,57 @@
             padding: 12px;
             text-align: center;
             font-size: 1.1em;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
             text-shadow: 0 0 6px #0ff;
+        }
+
+        /* GAME VIEWER OVERLAY */
+
+        #gameViewer {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* GAME WINDOW */
+
+        #gameWindow {
+            width: 90%;
+            max-width: 1100px;
+            height: 80vh;
+            background: black;
+            border: 2px solid rgba(0, 255, 255, .4);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 255, 255, .4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+
+        .viewer-header {
+            background: #000;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 255, 255, .3);
+        }
+
+        .viewer-header button {
+            cursor: pointer;
+        }
+
+        /* GAME FRAME */
+
+        #gameFrame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: black;
         }
 
         /* FOOTER */
@@ -174,7 +185,6 @@
             justify-content: center;
             background: rgba(0, 0, 0, .15);
             border-top: 1px solid rgba(0, 255, 255, .4);
-            backdrop-filter: blur(3px);
         }
     </style>
 
@@ -214,23 +224,27 @@
 
         <h1 class="site-title">Marty Games</h1>
 
-        <div id="embedViewer">
-
-            <div id="embedHeader">
-
-                <button onclick="closeEmbed()">Close</button> <button onclick="openNewTab()">New Tab</button>
-
-                <span id="embedTitle"></span>
-
-            </div>
-
-            <iframe id="embedFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
-
-        </div>
-
         <div id="game-list"></div>
 
     </main>
+
+    <div id="gameViewer">
+
+        <div id="gameWindow">
+
+            <div class="viewer-header">
+
+                <button onclick="closeGame()">Close</button> <button onclick="openNewTab()">Open in about:blank</button>
+
+                <span id="gameTitle"></span>
+
+            </div>
+
+            <iframe id="gameFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+        </div>
+
+    </div>
 
     <footer>
         <h4>© 2026 Marty Games</h4>
@@ -239,7 +253,6 @@
     <script>
         let gamesData = [];
         let currentGameHTML = "";
-        let currentGameURL = "";
 
         fetch("games.json")
             .then(r => r.json())
@@ -254,18 +267,13 @@
             const container = document.getElementById("game-list");
             container.innerHTML = "";
 
-            if (!games.length) {
-                container.innerHTML = "<p>No games found</p>";
-                return;
-            }
-
             games.forEach(game => {
 
                 const card = document.createElement("div");
                 card.className = "game-card";
 
                 card.innerHTML = `
-<img src="${game.thumbnail}" loading="lazy">
+<img src="${game.thumbnail}">
 <div class="game-title">${game.name}</div>
 `;
 
@@ -273,7 +281,7 @@
 
                 container.appendChild(card);
 
-            });
+            })
 
         }
 
@@ -313,8 +321,6 @@
 
             const base = url.substring(0, url.lastIndexOf("/") + 1);
 
-            /* rewrite asset paths */
-
             html = html.replace(/(src|href)=["'](?!https?:\/\/|\/)/g, `$1="${base}`);
             html = html.replace(/url\((?!https?:\/\/|\/)/g, `url(${base}`);
 
@@ -327,38 +333,28 @@
             const html = await loadGameHTML(game.url);
 
             currentGameHTML = html;
-            currentGameURL = game.url;
 
-            document.getElementById("embedViewer").style.display = "block";
-            document.getElementById("embedTitle").textContent = game.name;
+            document.getElementById("gameViewer").style.display = "flex";
+            document.getElementById("gameTitle").textContent = game.name;
 
-            const frame = document.getElementById("embedFrame");
-
-            frame.srcdoc = html;
-
-            window.scrollTo({
-                top: document.getElementById("embedViewer").offsetTop - 100,
-                behavior: "smooth"
-            });
+            document.getElementById("gameFrame").srcdoc = html;
 
         }
 
-        function closeEmbed() {
+        function closeGame() {
 
-            document.getElementById("embedViewer").style.display = "none";
-            document.getElementById("embedFrame").srcdoc = "";
+            document.getElementById("gameViewer").style.display = "none";
+            document.getElementById("gameFrame").srcdoc = "";
 
         }
 
         function openNewTab() {
 
-            if (!currentGameHTML) return;
+            const tab = window.open("about:blank");
 
-            const newTab = window.open("about:blank");
-
-            newTab.document.open();
-            newTab.document.write(currentGameHTML);
-            newTab.document.close();
+            tab.document.open();
+            tab.document.write(currentGameHTML);
+            tab.document.close();
 
         }
 
@@ -472,8 +468,6 @@
         init();
         animate();
     </script>
-
-
 </body>
 
 </html>
