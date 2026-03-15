@@ -9,10 +9,7 @@
 
 <style>
 
-a{
-text-decoration:none;
-color:inherit;
-}
+a{ text-decoration:none; color:inherit; }
 
 #bg-canvas{
 position:fixed;
@@ -40,7 +37,7 @@ flex:1;
 padding-top:120px;
 }
 
-/* TOP NAV */
+/* NAVBAR */
 
 .top-nav{
 position:fixed;
@@ -67,14 +64,7 @@ text-shadow:0 0 6px #0ff;
 display:flex;
 gap:10px;
 flex-wrap:wrap;
-justify-content:center;
 }
-
-.nav-right{
-font-weight:bold;
-}
-
-/* TITLE */
 
 .site-title{
 font-size:3em;
@@ -102,6 +92,35 @@ border-color:#0ff;
 box-shadow:0 0 10px #0ff;
 }
 
+/* EMBED VIEWER */
+
+#embedViewer{
+display:none;
+width:90%;
+max-width:1100px;
+margin:auto;
+margin-bottom:40px;
+border:2px solid rgba(0,255,255,.3);
+border-radius:12px;
+overflow:hidden;
+}
+
+#embedHeader{
+background:black;
+padding:10px;
+display:flex;
+gap:10px;
+border-bottom:1px solid rgba(0,255,255,.3);
+align-items:center;
+}
+
+#embedFrame{
+width:100%;
+height:80vh;
+border:none;
+background:black;
+}
+
 /* GAME GRID */
 
 #game-list{
@@ -122,7 +141,6 @@ cursor:pointer;
 transition:transform .3s ease, box-shadow .3s ease;
 box-shadow:0 0 12px rgba(0,255,255,0.3);
 border:2px solid rgba(0,255,255,0.25);
-display:block;
 }
 
 .game-card:hover{
@@ -134,7 +152,6 @@ box-shadow:0 0 15px #0ff,0 0 30px #0ff;
 width:100%;
 aspect-ratio:1/1;
 object-fit:cover;
-display:block;
 }
 
 .game-title{
@@ -145,62 +162,15 @@ background:linear-gradient(to top,rgba(0,0,0,0.9),rgba(0,0,0,0.6));
 text-shadow:0 0 6px #0ff;
 }
 
-/* GAME VIEWER */
-
-#gameViewer{
-position:fixed;
-inset:0;
-background:black;
-z-index:9999;
-display:none;
-flex-direction:column;
-}
-
-.viewer-header{
-background:#000;
-padding:10px;
-display:flex;
-gap:10px;
-align-items:center;
-border-bottom:1px solid rgba(0,255,255,.3);
-}
-
-.viewer-header button{
-padding:6px 10px;
-cursor:pointer;
-}
-
-#gameSandbox{
-flex:1;
-overflow:auto;
-background:black;
-}
-
 /* FOOTER */
 
 footer{
 padding:35px 0;
 display:flex;
 justify-content:center;
-gap:80px;
-flex-wrap:wrap;
 background:rgba(0,0,0,.15);
 border-top:1px solid rgba(0,255,255,.4);
 backdrop-filter:blur(3px);
-}
-
-.footer-section{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
-.footer-section a{
-color:#aaa;
-}
-
-.footer-section a:hover{
-color:white;
 }
 
 </style>
@@ -235,41 +205,39 @@ color:white;
 
 </div>
 
-<div class="nav-right">⭐</div>
-
 </div>
 
 <main>
 
 <h1 class="site-title">Marty Games</h1>
 
+<div id="embedViewer">
+
+<div id="embedHeader">
+
+<button onclick="closeEmbed()">Close</button> <button onclick="openNewTab()">New Tab</button>
+
+<span id="embedTitle"></span>
+
+</div>
+
+<iframe id="embedFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+</div>
+
 <div id="game-list"></div>
 
 </main>
 
-<div id="gameViewer">
-
-<div class="viewer-header">
-
-<button onclick="closeGame()">Close</button> <button onclick="fullscreenGame()">Fullscreen</button> <button onclick="openNewTab()">New Tab</button>
-
-<span id="gameTitle"></span>
-
-</div>
-
-<div id="gameSandbox"></div>
-
-</div>
-
 <footer>
-<div class="footer-section">
 <h4>© 2026 Marty Games</h4>
-</div>
 </footer>
 
 <script>
 
 let gamesData=[];
+let currentGameHTML="";
+let currentGameURL="";
 
 fetch("games.json")
 .then(r=>r.json())
@@ -277,10 +245,6 @@ fetch("games.json")
 gamesData=data;
 sortGames();
 filterGames();
-loadFromURL();
-})
-.catch(()=>{
-document.getElementById("game-list").innerHTML="Failed to load games.";
 });
 
 function renderGames(games){
@@ -319,10 +283,9 @@ const category=document.getElementById("categoryFilter").value;
 let filtered=gamesData.filter(game=>{
 
 const nameMatch=game.name.toLowerCase().includes(search);
-const idMatch=(game.id+"").includes(search);
 const categoryMatch=category==="all" || game.category===category;
 
-return (nameMatch||idMatch)&&categoryMatch;
+return nameMatch && categoryMatch;
 
 });
 
@@ -341,92 +304,59 @@ filterGames();
 
 }
 
-async function openGame(game){
+async function loadGameHTML(url){
 
-document.getElementById("gameViewer").style.display="flex";
-document.getElementById("gameTitle").textContent=game.name;
-
-const sandbox=document.getElementById("gameSandbox");
-sandbox.innerHTML="Loading...";
-
-try{
-
-const res=await fetch(game.url);
+const res=await fetch(url);
 let html=await res.text();
 
-const base=game.url.substring(0,game.url.lastIndexOf("/")+1);
+const base=url.substring(0,url.lastIndexOf("/")+1);
+
+/* rewrite asset paths */
 
 html=html.replace(/(src|href)=["'](?!https?:\/\/|\/)/g,`$1="${base}`);
+html=html.replace(/url\((?!https?:\/\/|\/)/g,`url(${base}`);
 
-sandbox.innerHTML=html;
+return html;
 
-sandbox.querySelectorAll("script").forEach(oldScript=>{
-
-const newScript=document.createElement("script");
-
-if(oldScript.src){
-newScript.src=oldScript.src;
-}else{
-newScript.textContent=oldScript.textContent;
 }
 
-document.body.appendChild(newScript);
-oldScript.remove();
+async function openGame(game){
 
+const html=await loadGameHTML(game.url);
+
+currentGameHTML=html;
+currentGameURL=game.url;
+
+document.getElementById("embedViewer").style.display="block";
+document.getElementById("embedTitle").textContent=game.name;
+
+const frame=document.getElementById("embedFrame");
+
+frame.srcdoc=html;
+
+window.scrollTo({
+top:document.getElementById("embedViewer").offsetTop-100,
+behavior:"smooth"
 });
 
-}catch(e){
-
-sandbox.innerHTML="Failed to load game.";
-
 }
 
-const url=new URL(window.location);
-url.searchParams.set("id",game.id);
-history.pushState(null,"",url);
+function closeEmbed(){
 
-}
-
-function closeGame(){
-
-document.getElementById("gameViewer").style.display="none";
-document.getElementById("gameSandbox").innerHTML="";
-
-const url=new URL(window.location);
-url.searchParams.delete("id");
-history.pushState(null,"",url);
-
-}
-
-function fullscreenGame(){
-
-const sandbox=document.getElementById("gameSandbox");
-
-if(sandbox.requestFullscreen) sandbox.requestFullscreen();
+document.getElementById("embedViewer").style.display="none";
+document.getElementById("embedFrame").srcdoc="";
 
 }
 
 function openNewTab(){
 
-const params=new URLSearchParams(window.location.search);
-const id=params.get("id");
+if(!currentGameHTML) return;
 
-const game=gamesData.find(g=>g.id==id);
+const newTab=window.open("about:blank");
 
-if(game) window.open(game.url,"_blank");
-
-}
-
-function loadFromURL(){
-
-const params=new URLSearchParams(window.location.search);
-const id=params.get("id");
-
-if(!id) return;
-
-const game=gamesData.find(g=>g.id==id);
-
-if(game) openGame(game);
+newTab.document.open();
+newTab.document.write(currentGameHTML);
+newTab.document.close();
 
 }
 
@@ -438,12 +368,13 @@ document.getElementById("sortSelect").addEventListener("change",sortGames);
 
 <script>
 
+/* PARTICLE BACKGROUND (unchanged) */
+
 const canvas=document.getElementById("bg-canvas"),
 ctx=canvas.getContext("2d");
 
 let particles=[];
 const MAX=window.innerWidth<600?25:50;
-const DIST=100;
 const COLORS=['#0ff','#ff0','#f0f','#0f0'];
 
 function init(){
@@ -453,70 +384,16 @@ canvas.height=window.innerHeight;
 
 particles=[];
 
-for(let i=0;i<MAX;i++) particles.push(new Particle());
+for(let i=0;i<MAX;i++){
 
-}
-
-class Particle{
-
-constructor(){
-
-this.x=Math.random()*canvas.width;
-this.y=Math.random()*canvas.height;
-this.size=Math.random()*3+1;
-this.vx=(Math.random()-.5)*1.2;
-this.vy=(Math.random()-.5)*1.2;
-this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
-
-}
-
-update(){
-
-this.x+=this.vx;
-this.y+=this.vy;
-
-if(this.x>canvas.width) this.x=0;
-if(this.x<0) this.x=canvas.width;
-
-if(this.y>canvas.height) this.y=0;
-if(this.y<0) this.y=canvas.height;
-
-}
-
-draw(){
-
-ctx.beginPath();
-ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-ctx.shadowColor=this.color;
-ctx.shadowBlur=8;
-ctx.fillStyle=this.color;
-ctx.fill();
-
-}
-
-}
-
-function connect(){
-
-for(let a=0;a<particles.length;a++){
-
-for(let b=a+1;b<particles.length;b++){
-
-let dx=particles[a].x-particles[b].x;
-let dy=particles[a].y-particles[b].y;
-let d=Math.sqrt(dx*dx+dy*dy);
-
-if(d<DIST){
-
-ctx.beginPath();
-ctx.strokeStyle=`rgba(0,255,255,${0.5-d/(2*DIST)})`;
-ctx.moveTo(particles[a].x,particles[a].y);
-ctx.lineTo(particles[b].x,particles[b].y);
-ctx.stroke();
-
-}
-
-}
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-.5)*1.2,
+vy:(Math.random()-.5)*1.2,
+size:Math.random()*3+1,
+color:COLORS[Math.floor(Math.random()*COLORS.length)]
+})
 
 }
 
@@ -527,11 +404,19 @@ function animate(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
 particles.forEach(p=>{
-p.update();
-p.draw();
-});
 
-connect();
+p.x+=p.vx;
+p.y+=p.vy;
+
+if(p.x<0||p.x>canvas.width)p.vx*=-1;
+if(p.y<0||p.y>canvas.height)p.vy*=-1;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.fillStyle=p.color;
+ctx.fill();
+
+})
 
 requestAnimationFrame(animate);
 
