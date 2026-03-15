@@ -91,6 +91,7 @@
             transition: transform .3s ease, box-shadow .3s ease;
             box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
             border: 2px solid rgba(0, 255, 255, 0.25);
+            display: block;
         }
 
         .game-card:hover {
@@ -145,6 +146,7 @@
     <canvas id="bg-canvas"></canvas>
 
     <main>
+
         <div class="top-bar">
 
             <h2>Marty Games</h2>
@@ -156,6 +158,7 @@
             <div id="game-list"></div>
 
         </div>
+
     </main>
 
     <script>
@@ -165,12 +168,17 @@
             .then(res => res.json())
             .then(data => {
 
-                // SORT ALPHABETICALLY
                 data.sort((a, b) => a.name.localeCompare(b.name));
 
                 gamesData = data;
 
                 renderGames(gamesData);
+
+            })
+            .catch(() => {
+
+                document.getElementById("game-list").innerHTML = "<p>Failed to load games.</p>";
+
             });
 
         function renderGames(games) {
@@ -179,17 +187,23 @@
 
             container.innerHTML = "";
 
+            if (games.length === 0) {
+
+                container.innerHTML = "<p>No games found.</p>";
+                return;
+
+            }
+
             games.forEach(game => {
 
-                const card = document.createElement("div");
+                const card = document.createElement("a");
                 card.className = "game-card";
+                card.href = game.url;
 
                 card.innerHTML = `
-        <a href="${game.url}">
-        <img src="${game.thumbnail}">
-        <div class="game-title">${game.name}</div>
-        </a>
-        `;
+<img src="${game.thumbnail}" loading="lazy">
+<div class="game-title">${game.name}</div>
+`;
 
                 container.appendChild(card);
 
@@ -208,6 +222,14 @@
             renderGames(filtered);
 
         });
+
+        let title = "Marty Games";
+        let i = 0;
+
+        setInterval(() => {
+            document.title = title.slice(i) + " | Marty Games";
+            i = (i + 1) % title.length;
+        }, 400);
     </script>
 
     <script>
@@ -215,8 +237,11 @@
             ctx = canvas.getContext("2d");
 
         let particles = [];
-        const MAX = 50;
+
+        const MAX = window.innerWidth < 600 ? 25 : 50;
+
         const DIST = 100;
+
         const COLORS = ['#0ff', '#ff0', '#f0f', '#0f0'];
 
         function init() {
@@ -316,9 +341,11 @@
     </script>
 
     <footer>
+
         <div class="footer-section">
             <h4>© 2026 Marty Games</h4>
         </div>
+
     </footer>
 
 </body>
